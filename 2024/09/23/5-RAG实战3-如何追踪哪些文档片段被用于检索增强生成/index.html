@@ -1,0 +1,740 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Whisper">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="RAG实战3-如何追踪哪些文档片段被用于检索增强生成本文是RAG实战2-如何使用LlamaIndex存储和读取embedding向量的续集，在阅读本文之前请先阅读前篇。 在前篇中，我们介绍了如何使用LlamaIndex存储和读取embedding向量。在本文中，我们将介绍在LlamaIndex中如何获得被用于检索增强生成的文档片段。 下面的代码展示了如何使用LlamaIndex追踪哪些文档片段被用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Whisper">
+<meta property="og:url" content="http://example.com/2024/09/23/5-RAG%E5%AE%9E%E6%88%983-%E5%A6%82%E4%BD%95%E8%BF%BD%E8%B8%AA%E5%93%AA%E4%BA%9B%E6%96%87%E6%A1%A3%E7%89%87%E6%AE%B5%E8%A2%AB%E7%94%A8%E4%BA%8E%E6%A3%80%E7%B4%A2%E5%A2%9E%E5%BC%BA%E7%94%9F%E6%88%90/index.html">
+<meta property="og:site_name" content="Whisper">
+<meta property="og:description" content="RAG实战3-如何追踪哪些文档片段被用于检索增强生成本文是RAG实战2-如何使用LlamaIndex存储和读取embedding向量的续集，在阅读本文之前请先阅读前篇。 在前篇中，我们介绍了如何使用LlamaIndex存储和读取embedding向量。在本文中，我们将介绍在LlamaIndex中如何获得被用于检索增强生成的文档片段。 下面的代码展示了如何使用LlamaIndex追踪哪些文档片段被用">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-09-23T01:05:23.644Z">
+<meta property="article:modified_time" content="2024-03-06T12:39:12.178Z">
+<meta property="article:author" content="Whisper">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Whisper</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":"sNKY2LpVKyefFEDeQRMP68x0-gzGzoHsz","app_key":"BKXxfiXHoQBLdKFJqEAn79wr","server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Whisper</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text=""></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-09-23 09:05" pubdate>
+          2024年9月23日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          13 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header"></h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="RAG实战3-如何追踪哪些文档片段被用于检索增强生成"><a href="#RAG实战3-如何追踪哪些文档片段被用于检索增强生成" class="headerlink" title="RAG实战3-如何追踪哪些文档片段被用于检索增强生成"></a>RAG实战3-如何追踪哪些文档片段被用于检索增强生成</h1><p>本文是<a target="_blank" rel="noopener" href="https://www.cnblogs.com/yourenbo/p/18057088">RAG实战2-如何使用LlamaIndex存储和读取embedding向量</a>的续集，在阅读本文之前请先阅读前篇。</p>
+<p>在前篇中，我们介绍了如何使用LlamaIndex存储和读取embedding向量。在本文中，我们将介绍在LlamaIndex中如何获得被用于检索增强生成的文档片段。</p>
+<p>下面的代码展示了如何使用LlamaIndex追踪哪些文档片段被用于检索增强生成：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> logging<br><span class="hljs-keyword">import</span> sys<br><span class="hljs-keyword">import</span> torch<br><span class="hljs-keyword">from</span> llama_index.core <span class="hljs-keyword">import</span> PromptTemplate, Settings, StorageContext, load_index_from_storage, QueryBundle<br><span class="hljs-keyword">from</span> llama_index.core.schema <span class="hljs-keyword">import</span> MetadataMode<br><span class="hljs-keyword">from</span> llama_index.embeddings.huggingface <span class="hljs-keyword">import</span> HuggingFaceEmbedding<br><span class="hljs-keyword">from</span> llama_index.llms.huggingface <span class="hljs-keyword">import</span> HuggingFaceLLM<br><br><span class="hljs-comment"># 定义日志</span><br>logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)<br>logging.getLogger().addHandler(logging.StreamHandler(stream=sys.stdout))<br><br><span class="hljs-comment"># 定义system prompt</span><br>SYSTEM_PROMPT = <span class="hljs-string">&quot;&quot;&quot;You are a helpful AI assistant.&quot;&quot;&quot;</span><br>query_wrapper_prompt = PromptTemplate(<br>    <span class="hljs-string">&quot;[INST]&lt;&lt;SYS&gt;&gt;\n&quot;</span> + SYSTEM_PROMPT + <span class="hljs-string">&quot;&lt;&lt;/SYS&gt;&gt;\n\n&#123;query_str&#125;[/INST] &quot;</span><br>)<br><br><span class="hljs-comment"># 使用llama-index创建本地大模型</span><br>llm = HuggingFaceLLM(<br>    context_window=<span class="hljs-number">4096</span>,<br>    max_new_tokens=<span class="hljs-number">2048</span>,<br>    generate_kwargs=&#123;<span class="hljs-string">&quot;temperature&quot;</span>: <span class="hljs-number">0.0</span>, <span class="hljs-string">&quot;do_sample&quot;</span>: <span class="hljs-literal">False</span>&#125;,<br>    query_wrapper_prompt=query_wrapper_prompt,<br>    tokenizer_name=<span class="hljs-string">&#x27;/yldm0226/models/Qwen1.5-14B-Chat&#x27;</span>,<br>    model_name=<span class="hljs-string">&#x27;/yldm0226/models/Qwen1.5-14B-Chat&#x27;</span>,<br>    device_map=<span class="hljs-string">&quot;auto&quot;</span>,<br>    model_kwargs=&#123;<span class="hljs-string">&quot;torch_dtype&quot;</span>: torch.float16&#125;,<br>)<br>Settings.llm = llm<br><br><span class="hljs-comment"># 使用llama-index-embeddings-huggingface构建本地embedding模型</span><br>Settings.embed_model = HuggingFaceEmbedding(<br>    model_name=<span class="hljs-string">&quot;/yldm0226/RAG/BAAI/bge-base-zh-v1.5&quot;</span><br>)<br><br><span class="hljs-comment"># 从存储文件中读取embedding向量和向量索引</span><br>storage_context = StorageContext.from_defaults(persist_dir=<span class="hljs-string">&quot;doc_emb&quot;</span>)<br>index = load_index_from_storage(storage_context)<br><span class="hljs-comment"># 构建查询引擎</span><br>query_engine = index.as_query_engine(similarity_top_k=<span class="hljs-number">5</span>)<br><span class="hljs-comment"># 获取我们抽取出的相似度前五的片段</span><br>contexts = query_engine.retrieve(QueryBundle(<span class="hljs-string">&quot;不耐疲劳，口燥、咽干可能是哪些证候？&quot;</span>))<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;-&#x27;</span>*<span class="hljs-number">10</span> + <span class="hljs-string">&#x27;ref&#x27;</span> + <span class="hljs-string">&#x27;-&#x27;</span>*<span class="hljs-number">10</span>)<br><span class="hljs-keyword">for</span> i, context <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(contexts):<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;*&#x27;</span>*<span class="hljs-number">10</span> + <span class="hljs-string">f&#x27;chunk <span class="hljs-subst">&#123;i&#125;</span> start&#x27;</span> + <span class="hljs-string">&#x27;*&#x27;</span>*<span class="hljs-number">10</span>)<br>    content = context.node.get_content(metadata_mode=MetadataMode.LLM)<br>    <span class="hljs-built_in">print</span>(content)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;*&#x27;</span> * <span class="hljs-number">10</span> + <span class="hljs-string">f&#x27;chunk <span class="hljs-subst">&#123;i&#125;</span> end&#x27;</span> + <span class="hljs-string">&#x27;*&#x27;</span> * <span class="hljs-number">10</span>)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;-&#x27;</span>*<span class="hljs-number">10</span> + <span class="hljs-string">&#x27;ref&#x27;</span> + <span class="hljs-string">&#x27;-&#x27;</span>*<span class="hljs-number">10</span>)<br><span class="hljs-comment"># 查询获得答案</span><br>response = query_engine.query(<span class="hljs-string">&quot;不耐疲劳，口燥、咽干可能是哪些证候？&quot;</span>)<br><span class="hljs-built_in">print</span>(response)<br></code></pre></td></tr></table></figure>
+
+<p>运行代码，可以得到query的输出为：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs markdown">从提供的中医临床证候信息来看，口燥、咽干的症状可能与以下证候相关：<br><br><span class="hljs-bullet">1.</span> 津液不足证：由于津液生成不足或者体内燥热导致，表现为口眼喉鼻干燥，咽干是其中的一个症状。<br><br><span class="hljs-bullet">2.</span> 津亏热结证：津液亏虚加上热邪内结，也可能出现口燥和咽干。<br><br><span class="hljs-bullet">3.</span> 津液亏涸证：严重的津液亏损可能导致口唇干燥、咽部干燥，伴随其他严重脱水症状。<br><br><span class="hljs-bullet">4.</span> 燥干清窍证：气候干燥或体质原因引起的津液缺乏，口鼻咽喉干燥也是其特征。<br><br><span class="hljs-bullet">5.</span> 津伤化燥证：燥热内蕴或内热化燥损伤津液，也会出现口燥、频饮但不解渴的现象。<br><br>因此，这些证候都有可能与不耐疲劳和口燥、咽干的症状相符合，需要结合其他临床表现来确定具体的证候类型。建议在中医诊断中由专业医生根据全人情况判断。<br></code></pre></td></tr></table></figure>
+
+<p>对于”不耐疲劳，口燥、咽干可能是哪些证候？”这个查询，其相似度前五的片段如下：</p>
+<table>
+<thead>
+<tr>
+<th>片段序号</th>
+<th>片段信息</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>file_path: document&#x2F;中医临床诊疗术语证候.txt<br/><br/>4.6.1.1<br/>    津液不足证  syndrome&#x2F;pattern of fluid and humor insufficiency<br/>    津亏证<br/>    因津液生成不足，或嗜食辛辣，蕴热化燥，邪热灼损津液所致。临床以口眼喉鼻及皮肤等干燥，大便干结，小便短少，舌质偏红而干，脉细数等为特征的证候。<br/><br/>4.6.1.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>file_path: document&#x2F;中医临床诊疗术语证候.txt<br/><br/>临床以口干、舌燥，频饮而不解其渴，食多、善饥，夜尿频多，逐渐消瘦，舌质红，舌苔薄黄或少，脉弦细或滑数，伴见皮肤干燥，四肢乏力，大便干结等为特征的证候。<br/><br/>4.6.3.2<br/>    津亏热结证  syndrome&#x2F;pattern of fluid depletion and heat binding<br/>    液干热结证<br/>    因津液亏虚，热邪内结所致。</td>
+</tr>
+<tr>
+<td>3</td>
+<td>file_path: document&#x2F;中医临床诊疗术语证候.txt<br/><br/>临床以口眼喉鼻及皮肤等干燥，大便干结，小便短少，舌质偏红而干，脉细数等为特征的证候。<br/><br/>4.6.1.2<br/>    津液亏涸证  syndrome&#x2F;pattern of fluid and humor scantiness<br/>    津液亏耗证<br/>    津液干枯证<br/>    因津液亏损，形体官窍失养所致。临床以口干、唇裂，鼻燥无涕，皮肤干瘪，目陷、螺瘪，甚则肌肤甲错，舌质红而少津，舌中裂，脉细或数，可伴见口渴、欲饮，干咳，目涩，大便干，小便少等为特征的证候。</td>
+</tr>
+<tr>
+<td>4</td>
+<td>file_path: document&#x2F;中医临床诊疗术语证候.txt<br/><br/>临床以鼻咽干涩或痛，口唇燥干，舌质红，舌苔白或燥，脉浮或微数，伴见发热、无汗，头痛或肢节酸痛等为特征的证候。<br/><br/>3.6.3.2<br/>    燥干清窍证  syndrome&#x2F;pattern of dryness harassing the upper orifices<br/>    因气候或环境干燥，津液耗损，清窍失濡所致。临床以口鼻、咽喉干燥，两眼干涩，少泪、少涕、少津、甚则衄血，舌质瘦小、舌苔干而少津，脉细等为特征的证候。</td>
+</tr>
+<tr>
+<td>5</td>
+<td>file_path: document&#x2F;中医临床诊疗术语证候.txt<br/><br/>6.3.1<br/>    津伤化燥证  syndrome&#x2F;pattern of fluid damage transforming into dryness<br/>    津伤燥热证<br/>    因燥热内蕴，或内热化燥，伤津耗液所致。临床以口干、舌燥，频饮而不解其渴，食多、善饥，夜尿频多，逐渐消瘦，舌质红，舌苔薄黄或少，脉弦细或滑数，伴见皮肤干燥，四肢乏力，大便干结等为特征的证候。<br/><br/>4.6.3.</td>
+</tr>
+</tbody></table>
+<p>可以看出，我们得到的query的输出中的证候都是这几个片段中的，大模型也确实根据我们检索出的片段进行了回复。</p>
+<p>片段1和片段5的结尾存在多余的章节号，这主要与我们使用的embedding模型和设置的<code>chunk_size</code>有关。我们可以通过追踪观察这些被用于检索增强生成的文档片段来调整<code>chunk_size</code>的值，以让embedding模型切分出的片段更合理，提高RAG系统的表现。</p>
+<p>如果想追踪更多的检索片段，可以提高<code>similarity_top_k</code>的值。</p>
+<p>如果想追踪片段具体的相似度得分（Similarity Score）的值，可以将log中的<code>level</code>设置为DEBUG级别。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div></div>
+      <div>http://example.com/2024/09/23/5-RAG实战3-如何追踪哪些文档片段被用于检索增强生成/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Whisper</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年9月23日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/09/23/6-LoRA%E5%BE%AE%E8%B0%83/" title="">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile"></span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/09/23/4-RAG%E5%AE%9E%E6%88%982-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8LlamaIndex%E5%AD%98%E5%82%A8%E5%92%8C%E8%AF%BB%E5%8F%96%E5%90%91%E9%87%8F/" title="">
+                        <span class="hidden-mobile"></span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"sNKY2LpVKyefFEDeQRMP68x0-gzGzoHsz","appKey":"BKXxfiXHoQBLdKFJqEAn79wr","path":"window.location.pathname","placeholder":"说点什么吧~","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
