@@ -19,21 +19,21 @@
   <meta name="author" content="Whisper">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Linux nohup命令详解我们自己笔记本或台式机的显卡往往不能支持我们进行深度学习实验或大模型训练，因此我们往往使用SSH连接服务器然后去运行代码。 有的时候我们跑的程序需要跑几个小时甚至几天，这样我们就需要一直开着电脑挂着SSH；偶尔也会遇上网络断开，程序半途中止的情况。 所以，我们需要一个下述的功能：即使我们远程连接SSH的终端被关闭了，程序依旧在服务器上运行。这时候就需要用到Linux的">
+    <meta name="description" content="超算服务器山河源配置添加host1234vi &#x2F;etc&#x2F;hosts### 追加一行 10.251.102.1 mirrors.shanhe.com10.251.102.1 mirrors.shanhe.com## 保存后退出 ：wq  ubuntu 18.0412345678910111213141516cat &gt; &#x2F;etc&#x2F;apt&#x2F;sources.list &lt;&lt; &quot;E">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Whisper">
-<meta property="og:url" content="http://example.com/2024/09/23/11-linux%20nohup%E6%8C%87%E4%BB%A4%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:title" content="超算服务器山河源配置">
+<meta property="og:url" content="http://example.com/2024/03/01/%E8%B6%85%E7%AE%97%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%B1%B1%E6%B2%B3%E6%BA%90%E9%85%8D%E7%BD%AE/index.html">
 <meta property="og:site_name" content="Whisper">
-<meta property="og:description" content="Linux nohup命令详解我们自己笔记本或台式机的显卡往往不能支持我们进行深度学习实验或大模型训练，因此我们往往使用SSH连接服务器然后去运行代码。 有的时候我们跑的程序需要跑几个小时甚至几天，这样我们就需要一直开着电脑挂着SSH；偶尔也会遇上网络断开，程序半途中止的情况。 所以，我们需要一个下述的功能：即使我们远程连接SSH的终端被关闭了，程序依旧在服务器上运行。这时候就需要用到Linux的">
+<meta property="og:description" content="超算服务器山河源配置添加host1234vi &#x2F;etc&#x2F;hosts### 追加一行 10.251.102.1 mirrors.shanhe.com10.251.102.1 mirrors.shanhe.com## 保存后退出 ：wq  ubuntu 18.0412345678910111213141516cat &gt; &#x2F;etc&#x2F;apt&#x2F;sources.list &lt;&lt; &quot;E">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-09-23T01:05:23.654Z">
-<meta property="article:modified_time" content="2024-03-07T11:32:14.906Z">
+<meta property="article:published_time" content="2024-02-29T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-09-23T01:39:58.173Z">
 <meta property="article:author" content="Whisper">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>Whisper</title>
+  <title>超算服务器山河源配置 - Whisper</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -212,7 +212,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text=""></span>
+            <span id="subtitle" data-typed-text="超算服务器山河源配置"></span>
           
         </div>
 
@@ -223,8 +223,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-09-23 09:05" pubdate>
-          2024年9月23日 上午
+        <time datetime="2024-03-01 00:00" pubdate>
+          2024年3月1日 凌晨
         </time>
       </span>
     
@@ -235,7 +235,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          851 字
+          201 字
         
       </span>
     
@@ -246,7 +246,7 @@
         
         
         
-          8 分钟
+          2 分钟
         
       </span>
     
@@ -292,53 +292,18 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header"></h1>
+            <h1 id="seo-header">超算服务器山河源配置</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="Linux-nohup命令详解"><a href="#Linux-nohup命令详解" class="headerlink" title="Linux nohup命令详解"></a>Linux nohup命令详解</h1><p>我们自己笔记本或台式机的显卡往往不能支持我们进行深度学习实验或大模型训练，因此我们往往使用SSH连接服务器然后去运行代码。</p>
-<p>有的时候我们跑的程序需要跑几个小时甚至几天，这样我们就需要一直开着电脑挂着SSH；偶尔也会遇上网络断开，程序半途中止的情况。</p>
-<p>所以，我们需要一个下述的功能：即使我们远程连接SSH的终端被关闭了，程序依旧在服务器上运行。这时候就需要用到Linux的nohup指令。</p>
-<p>nohup命令是英语词组 no hangup的缩写，意思是不挂断，也就是指程序不退出。这个命令会使程序忽略 HUP 信号，保证程序能够正常进行。<code>HUP</code> 信号是在终端被中止的时候向它所关联的进程所发出的信号，进程收到这个信号后就会中止运行。所以如果你不希望进程被这个信号干掉的话，就可以忽略这个信号。而 nohup命令做的就是这个事情。</p>
-<hr>
-<p>首先来看nohup的语法：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">nohup</span> Command [Arg...] [ &amp;]<br></code></pre></td></tr></table></figure>
+                <h1 id="超算服务器山河源配置"><a href="#超算服务器山河源配置" class="headerlink" title="超算服务器山河源配置"></a>超算服务器山河源配置</h1><h2 id="添加host"><a href="#添加host" class="headerlink" title="添加host"></a>添加host</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">vi /etc/hosts<br><span class="hljs-comment">### 追加一行 10.251.102.1 mirrors.shanhe.com</span><br>10.251.102.1 mirrors.shanhe.com<br><span class="hljs-comment">## 保存后退出 ：wq</span><br></code></pre></td></tr></table></figure>
 
-<p> 最后的” &amp;”：表示后台运行，不占用交互命令行 </p>
-<p>如果不将 nohup 命令的输出重定向，输出将附加到当前目录的 nohup.out 文件中。</p>
-<p>如果当前目录的 nohup.out 文件不可写，输出重定向到 $HOME&#x2F;nohup.out 文件中。 </p>
-<p>如果没有文件能创建或打开以用于追加，那么 Command 参数指定的命令不可调用。 </p>
-<p>如果标准错误是一个终端，那么把指定的命令写给标准错误的所有输出作为标准输出重定向到相同的文件描述符。 </p>
-<p>假设用nohup运行一个名为task.sh的脚本： nohup task.sh &gt; my_log.out 2&gt;&amp;1 &amp; </p>
-<p>该命令中的数字解释如下：</p>
-<ul>
-<li>0 – stdin (standard input，标准输入)  </li>
-<li>1 – stdout (standard output，标准输出）</li>
-<li>2 – stderr (standard error，标准错误输出）</li>
-</ul>
-<p> 2&gt;&amp;1解释： 将标准错误（2）重定向到标准输出（&amp;1）， 标准输出（&amp;1）再被重定向输入到my_log.out文件中。</p>
-<hr>
-<p>使用举例：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">nohup</span> python train.py &amp;<br></code></pre></td></tr></table></figure>
+<h2 id="ubuntu-18-04"><a href="#ubuntu-18-04" class="headerlink" title="ubuntu 18.04"></a>ubuntu 18.04</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cat</span> &gt; /etc/apt/sources.list &lt;&lt; <span class="hljs-string">&quot;EOF&quot;</span><br>deb https://mirrors.shanhe.com/ubuntu/ bionic main restricted universe multiverse<br>deb-src https://mirrors.shanhe.com/ubuntu/ bionic main restricted universe multiverse<br>deb https://mirrors.shanhe.com/ubuntu/ bionic-security main restricted universe multiverse<br>deb-src https://mirrors.shanhe.com/ubuntu/ bionic-security main restricted universe multiverse<br><br>deb https://mirrors.shanhe.com/ubuntu/ bionic-updates main restricted universe multiverse<br>deb-src https://mirrors.shanhe.com/ubuntu/ bionic-updates main restricted universe multiverse<br><br>deb https://mirrors.shanhe.com/ubuntu/ bionic-backports main restricted universe multiverse<br>deb-src https://mirrors.shanhe.com/ubuntu/ bionic-backports main restricted universe multiverse<br><br><span class="hljs-comment">## Not recommended</span><br><span class="hljs-comment"># deb http://mirrors.shanhe.com/ubuntu/ bionic-proposed main restricted universe multiverse</span><br><span class="hljs-comment"># deb-src http://mirrors.shanhe.com/ubuntu/ bionic-proposed main restricted universe multiverse</span><br>EOF<br></code></pre></td></tr></table></figure>
 
-<p>后台运行train.py，会在train.py目录下创建一个nohup.out文件来记录程序的输出。</p>
-<p>在使用时，我们会发现一个问题，nohup.out文件中的内容并不会立刻变化，这是因为python的标准输出是有缓冲的。</p>
-<p>如果我们想要立刻在nohup.out中实时看到python程序的输出，可以使用以下命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">nohup</span> python -u train.py &amp;<br></code></pre></td></tr></table></figure>
+<h2 id="condarc"><a href="#condarc" class="headerlink" title=".condarc"></a>.condarc</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cat</span> &gt; ~/.condarc &lt;&lt; <span class="hljs-string">&quot;EOF&quot;</span><br>channels:<br>  - defaults<br>show_channel_urls: <span class="hljs-literal">true</span><br>default_channels:<br>  - https://mirrors.shanhe.com/anaconda/pkgs/main<br>  - https://mirrors.shanhe.com/anaconda/pkgs/r<br>  - https://mirrors.shanhe.com/anaconda/pkgs/msys2<br>custom_channels:<br>  bioconda: https://mirrors.shanhe.com/anaconda/cloud<br>  conda-forge: https://mirrors.shanhe.com/anaconda/cloud<br>ssl_verify: <span class="hljs-literal">false</span><br>EOF<br></code></pre></td></tr></table></figure>
 
-<p>-u会禁用python的缓冲。</p>
-<p>假如我们的训练脚本名为train.sh，我们可以使用以下命令启动训练：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">nohup</span> train.sh &gt; log.out 2&gt;&amp;1 &amp;<br></code></pre></td></tr></table></figure>
-
-<p>该命令会在后台运行train.sh，同时将标准错误重定向到标准输出，然后再将标准输出写入到log.out文件中。</p>
-<hr>
-<p>上面有提到，nohup 命令结合 &amp; 符号可以使进程在后台运行，即使关闭了终端依然不受影响。这时，如果想要终止这个进程，可以按照以下步骤操作：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">ps aux | grep train.sh<br>或<br>ps -ef | grep python<br></code></pre></td></tr></table></figure>
-
-<p>通过上面的命令获取进程的pid。</p>
-<p>然后用以下命令杀死对应的进程：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">kill</span> -9 pid<br></code></pre></td></tr></table></figure>
+<h2 id="pip"><a href="#pip" class="headerlink" title="pip"></a>pip</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 下面举例了pip安装numpy库两种方式</span><br><span class="hljs-comment">#方式1</span><br><span class="hljs-built_in">mkdir</span> ~/.pip<br><span class="hljs-built_in">cd</span> ~/.pip<br>vim pip.conf<br><br>[global]<br>index-url=https://mirrors.shanhe.com/simple<br>trusted-host = mirrors.shanhe.com<br><br>:wq<br>pip install nump<br><span class="hljs-comment">##方式2 </span><br>pip install nump -i https://mirrors.shanhe.com/simple<br></code></pre></td></tr></table></figure>
 
 
                 
@@ -347,6 +312,27 @@
             <hr/>
             <div>
               <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Linux/" class="category-chain-item">Linux</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
   
   
 </div>
@@ -357,8 +343,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div></div>
-      <div>http://example.com/2024/09/23/11-linux nohup指令详解/</div>
+      <div>超算服务器山河源配置</div>
+      <div>http://example.com/2024/03/01/超算服务器山河源配置/</div>
     </div>
     <div class="license-meta">
       
@@ -370,7 +356,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年9月23日</div>
+          <div>2024年3月1日</div>
         </div>
       
       
@@ -402,9 +388,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/09/23/Ubuntu%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BD%BF%E7%94%A8apt-get%E5%AE%89%E8%A3%85%E5%8C%85%E6%97%B6%E5%87%BA%E7%8E%B0E%20Unable%20to%20locate%20package/" title="">
+                      <a href="/2024/03/01/%E8%A7%A3%E5%86%B3debian%E6%9C%8D%E5%8A%A1%E5%99%A8DNS%E8%87%AA%E5%8A%A8%E6%B8%85%E9%99%A4%E9%97%AE%E9%A2%98/" title="解决Debian服务器使用NetworkManager出现的DNS自动清除问题">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile"></span>
+                        <span class="hidden-mobile">解决Debian服务器使用NetworkManager出现的DNS自动清除问题</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -412,8 +398,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/03/16/14-%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E9%83%A8%E7%BD%B2%E4%B8%AD%E5%8C%BB%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/" title="在Linux服务器上部署中医知识图谱">
-                        <span class="hidden-mobile">在Linux服务器上部署中医知识图谱</span>
+                      <a href="/2024/03/01/%E4%BD%BF%E7%94%A8gradio%E5%90%AF%E5%8A%A8web-ui%E6%97%B6%E5%87%BA%E7%8E%B0cannot%20import%20name%20&#39;RootModel&#39;%20from%20&#39;pydantic&#39;/" title="使用gradio启动web-ui时出现cannot import name &#39;RootModel&#39; from &#39;pydantic&#39;">
+                        <span class="hidden-mobile">使用gradio启动web-ui时出现cannot import name &#39;RootModel&#39; from &#39;pydantic&#39;</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

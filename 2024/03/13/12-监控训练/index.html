@@ -19,21 +19,22 @@
   <meta name="author" content="Whisper">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Linux nohup命令详解我们自己笔记本或台式机的显卡往往不能支持我们进行深度学习实验或大模型训练，因此我们往往使用SSH连接服务器然后去运行代码。 有的时候我们跑的程序需要跑几个小时甚至几天，这样我们就需要一直开着电脑挂着SSH；偶尔也会遇上网络断开，程序半途中止的情况。 所以，我们需要一个下述的功能：即使我们远程连接SSH的终端被关闭了，程序依旧在服务器上运行。这时候就需要用到Linux的">
+    <meta name="description" content="监控大模型训练大模型训练时间久，而且过程中容易出现各种各样的问题而中断，中断之后不及时续练的话对GPU资源是很大的浪费，但是我们又不能一直盯着程序。所以本文将介绍如何编写一个监控程序来监控大模型的训练，以方便我们在大模型训练出现异常时及时通知给我们。 监控的方式有很多，这里介绍两个方式。 根据log文件大小变化监控训练是否进行在linux nohup指令详解中，我们提到了使用Linux的nohup">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Whisper">
-<meta property="og:url" content="http://example.com/2024/09/23/11-linux%20nohup%E6%8C%87%E4%BB%A4%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:title" content="监控大模型训练">
+<meta property="og:url" content="http://example.com/2024/03/13/12-%E7%9B%91%E6%8E%A7%E8%AE%AD%E7%BB%83/index.html">
 <meta property="og:site_name" content="Whisper">
-<meta property="og:description" content="Linux nohup命令详解我们自己笔记本或台式机的显卡往往不能支持我们进行深度学习实验或大模型训练，因此我们往往使用SSH连接服务器然后去运行代码。 有的时候我们跑的程序需要跑几个小时甚至几天，这样我们就需要一直开着电脑挂着SSH；偶尔也会遇上网络断开，程序半途中止的情况。 所以，我们需要一个下述的功能：即使我们远程连接SSH的终端被关闭了，程序依旧在服务器上运行。这时候就需要用到Linux的">
+<meta property="og:description" content="监控大模型训练大模型训练时间久，而且过程中容易出现各种各样的问题而中断，中断之后不及时续练的话对GPU资源是很大的浪费，但是我们又不能一直盯着程序。所以本文将介绍如何编写一个监控程序来监控大模型的训练，以方便我们在大模型训练出现异常时及时通知给我们。 监控的方式有很多，这里介绍两个方式。 根据log文件大小变化监控训练是否进行在linux nohup指令详解中，我们提到了使用Linux的nohup">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-09-23T01:05:23.654Z">
-<meta property="article:modified_time" content="2024-03-07T11:32:14.906Z">
+<meta property="article:published_time" content="2024-03-12T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-09-23T01:37:38.991Z">
 <meta property="article:author" content="Whisper">
+<meta property="article:tag" content="大模型">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>Whisper</title>
+  <title>监控大模型训练 - Whisper</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -212,7 +213,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text=""></span>
+            <span id="subtitle" data-typed-text="监控大模型训练"></span>
           
         </div>
 
@@ -223,8 +224,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-09-23 09:05" pubdate>
-          2024年9月23日 上午
+        <time datetime="2024-03-13 00:00" pubdate>
+          2024年3月13日 凌晨
         </time>
       </span>
     
@@ -235,7 +236,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          851 字
+          950 字
         
       </span>
     
@@ -292,54 +293,24 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header"></h1>
+            <h1 id="seo-header">监控大模型训练</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="Linux-nohup命令详解"><a href="#Linux-nohup命令详解" class="headerlink" title="Linux nohup命令详解"></a>Linux nohup命令详解</h1><p>我们自己笔记本或台式机的显卡往往不能支持我们进行深度学习实验或大模型训练，因此我们往往使用SSH连接服务器然后去运行代码。</p>
-<p>有的时候我们跑的程序需要跑几个小时甚至几天，这样我们就需要一直开着电脑挂着SSH；偶尔也会遇上网络断开，程序半途中止的情况。</p>
-<p>所以，我们需要一个下述的功能：即使我们远程连接SSH的终端被关闭了，程序依旧在服务器上运行。这时候就需要用到Linux的nohup指令。</p>
-<p>nohup命令是英语词组 no hangup的缩写，意思是不挂断，也就是指程序不退出。这个命令会使程序忽略 HUP 信号，保证程序能够正常进行。<code>HUP</code> 信号是在终端被中止的时候向它所关联的进程所发出的信号，进程收到这个信号后就会中止运行。所以如果你不希望进程被这个信号干掉的话，就可以忽略这个信号。而 nohup命令做的就是这个事情。</p>
-<hr>
-<p>首先来看nohup的语法：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">nohup</span> Command [Arg...] [ &amp;]<br></code></pre></td></tr></table></figure>
+                <h1 id="监控大模型训练"><a href="#监控大模型训练" class="headerlink" title="监控大模型训练"></a>监控大模型训练</h1><p>大模型训练时间久，而且过程中容易出现各种各样的问题而中断，中断之后不及时续练的话对GPU资源是很大的浪费，但是我们又不能一直盯着程序。所以本文将介绍如何编写一个监控程序来监控大模型的训练，以方便我们在大模型训练出现异常时及时通知给我们。</p>
+<p>监控的方式有很多，这里介绍两个方式。</p>
+<h2 id="根据log文件大小变化监控训练是否进行"><a href="#根据log文件大小变化监控训练是否进行" class="headerlink" title="根据log文件大小变化监控训练是否进行"></a>根据log文件大小变化监控训练是否进行</h2><p>在<a href="">linux nohup指令详解</a>中，我们提到了使用Linux的nohup命令来运行训练脚本，该命令会创建一个日志文件，大模型在训练的过程中会不断输出内容，因此该日志文件的大小是随时在变化的。因此，我们可以通过隔一段时间判断该日志文件的大小是否变化来判断大模型的训练是否出现异常。如果大模型训练出现异常，我们需要通过一种常用的通讯方式来告知自己，这里选择使用邮箱（也可以使用短信、QQ&#x2F;微信通知等方式）。</p>
+<p>核心代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> os<br><span class="hljs-keyword">import</span> time<br><span class="hljs-keyword">import</span> smtplib<br><span class="hljs-keyword">from</span> email.mime.text <span class="hljs-keyword">import</span> MIMEText<br><br><span class="hljs-comment"># 配置邮箱信息</span><br>SMTP_SERVER = <span class="hljs-string">&#x27;smtp.qq.com&#x27;</span><br>SMTP_PORT = <span class="hljs-number">587</span><br>EMAIL_USERNAME = <span class="hljs-string">&#x27;作为SMTP服务器的QQ邮箱&#x27;</span><br>EMAIL_PASSWORD = <span class="hljs-string">&#x27;你的QQ邮箱SMTP服务的密钥&#x27;</span><br>EMAIL_FROM = <span class="hljs-string">&#x27;作为SMTP服务器的QQ邮箱&#x27;</span><br>EMAIL_TO = <span class="hljs-string">&#x27;你接收通知邮件的QQ邮箱&#x27;</span><br>EMAIL_SUBJECT = <span class="hljs-string">&#x27;大模型训练终止提醒&#x27;</span><br><br><span class="hljs-comment"># 监测的文件路径</span><br>FILE_PATH = <span class="hljs-string">&#x27;/...../nohup.out&#x27;</span><br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">send_email</span>(<span class="hljs-params">message</span>):<br>    msg = MIMEText(message)<br>    msg[<span class="hljs-string">&#x27;From&#x27;</span>] = EMAIL_FROM<br>    msg[<span class="hljs-string">&#x27;To&#x27;</span>] = EMAIL_TO<br>    msg[<span class="hljs-string">&#x27;Subject&#x27;</span>] = EMAIL_SUBJECT<br><br>    <span class="hljs-keyword">with</span> smtplib.SMTP(SMTP_SERVER, SMTP_PORT) <span class="hljs-keyword">as</span> server:<br>        server.starttls()<br>        server.login(EMAIL_USERNAME, EMAIL_PASSWORD)<br>        server.sendmail(from_addr=EMAIL_FROM, to_addrs=[EMAIL_TO], msg=msg.as_string())<br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">monitor_file</span>():<br>    <span class="hljs-comment"># 获取初始文件大小</span><br>    initial_size = os.path.getsize(FILE_PATH)<br><br>    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>        <span class="hljs-comment"># 等待10分钟</span><br>        time.sleep(<span class="hljs-number">600</span>)<br><br>        <span class="hljs-comment"># 获取当前文件大小</span><br>        current_size = os.path.getsize(FILE_PATH)<br><br>        <span class="hljs-keyword">if</span> current_size == initial_size:<br>            <span class="hljs-comment"># 文件大小没有变化，发送警告邮件</span><br>            message = <span class="hljs-string">&#x27;日志文件在十分钟内没有发生变化，大模型训练可能已终止！&#x27;</span><br>            send_email(message)<br>        <span class="hljs-keyword">else</span>:<br>            <span class="hljs-comment"># 文件大小发生变化，更新初始文件大小</span><br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">f&#x27;log changed: <span class="hljs-subst">&#123;current_size-initial_size&#125;</span>&#x27;</span>)<br>            initial_size = current_size<br>            <br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&#x27;__main__&#x27;</span>:<br>    monitor_file()<br></code></pre></td></tr></table></figure>
 
-<p> 最后的” &amp;”：表示后台运行，不占用交互命令行 </p>
-<p>如果不将 nohup 命令的输出重定向，输出将附加到当前目录的 nohup.out 文件中。</p>
-<p>如果当前目录的 nohup.out 文件不可写，输出重定向到 $HOME&#x2F;nohup.out 文件中。 </p>
-<p>如果没有文件能创建或打开以用于追加，那么 Command 参数指定的命令不可调用。 </p>
-<p>如果标准错误是一个终端，那么把指定的命令写给标准错误的所有输出作为标准输出重定向到相同的文件描述符。 </p>
-<p>假设用nohup运行一个名为task.sh的脚本： nohup task.sh &gt; my_log.out 2&gt;&amp;1 &amp; </p>
-<p>该命令中的数字解释如下：</p>
-<ul>
-<li>0 – stdin (standard input，标准输入)  </li>
-<li>1 – stdout (standard output，标准输出）</li>
-<li>2 – stderr (standard error，标准错误输出）</li>
-</ul>
-<p> 2&gt;&amp;1解释： 将标准错误（2）重定向到标准输出（&amp;1）， 标准输出（&amp;1）再被重定向输入到my_log.out文件中。</p>
-<hr>
-<p>使用举例：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">nohup</span> python train.py &amp;<br></code></pre></td></tr></table></figure>
 
-<p>后台运行train.py，会在train.py目录下创建一个nohup.out文件来记录程序的输出。</p>
-<p>在使用时，我们会发现一个问题，nohup.out文件中的内容并不会立刻变化，这是因为python的标准输出是有缓冲的。</p>
-<p>如果我们想要立刻在nohup.out中实时看到python程序的输出，可以使用以下命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">nohup</span> python -u train.py &amp;<br></code></pre></td></tr></table></figure>
 
-<p>-u会禁用python的缓冲。</p>
-<p>假如我们的训练脚本名为train.sh，我们可以使用以下命令启动训练：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">nohup</span> train.sh &gt; log.out 2&gt;&amp;1 &amp;<br></code></pre></td></tr></table></figure>
+<h2 id="根据GPU显存占用率监控训练是否进行"><a href="#根据GPU显存占用率监控训练是否进行" class="headerlink" title="根据GPU显存占用率监控训练是否进行"></a>根据GPU显存占用率监控训练是否进行</h2><p>训练大模型时，GPU的显存占用率一般都比较高，所以我们也可以通过GPU显存的占用率来判断大模型的训练是否出现异常。这里我们同样使用邮箱来通知自己。</p>
+<p>核心代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> subprocess<br><span class="hljs-keyword">import</span> smtplib<br><span class="hljs-keyword">from</span> email.mime.text <span class="hljs-keyword">import</span> MIMEText<br><span class="hljs-keyword">import</span> time<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">get_gpu_memory_usage</span>():<br>    output = subprocess.check_output([<span class="hljs-string">&#x27;nvidia-smi&#x27;</span>, <span class="hljs-string">&#x27;--query-gpu=memory.used&#x27;</span>, <span class="hljs-string">&#x27;--format=csv,nounits,noheader&#x27;</span>])<br>    memory_used = [<span class="hljs-built_in">int</span>(x) <span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> output.decode().strip().split(<span class="hljs-string">&#x27;\n&#x27;</span>)]<br>    <span class="hljs-keyword">return</span> memory_used<br><br><span class="hljs-comment"># 配置邮箱信息</span><br>SMTP_SERVER = <span class="hljs-string">&#x27;smtp.qq.com&#x27;</span><br>SMTP_PORT = <span class="hljs-number">587</span><br>EMAIL_USERNAME = <span class="hljs-string">&#x27;作为SMTP服务器的QQ邮箱&#x27;</span><br>EMAIL_PASSWORD = <span class="hljs-string">&#x27;你的QQ邮箱SMTP服务的密钥&#x27;</span><br>EMAIL_FROM = <span class="hljs-string">&#x27;作为SMTP服务器的QQ邮箱&#x27;</span><br>EMAIL_TO = <span class="hljs-string">&#x27;你接收通知邮件的QQ邮箱&#x27;</span><br>EMAIL_SUBJECT = <span class="hljs-string">&#x27;大模型训练终止提醒&#x27;</span><br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">send_email</span>(<span class="hljs-params">message</span>):<br>    msg = MIMEText(message)<br>    msg[<span class="hljs-string">&#x27;From&#x27;</span>] = EMAIL_FROM<br>    msg[<span class="hljs-string">&#x27;To&#x27;</span>] = EMAIL_TO<br>    msg[<span class="hljs-string">&#x27;Subject&#x27;</span>] = EMAIL_SUBJECT<br><br>    <span class="hljs-keyword">with</span> smtplib.SMTP(SMTP_SERVER, SMTP_PORT) <span class="hljs-keyword">as</span> server:<br>        server.starttls()<br>        server.login(EMAIL_USERNAME, EMAIL_PASSWORD)<br>        server.sendmail(from_addr=EMAIL_FROM, to_addrs=[EMAIL_TO], msg=msg.as_string())<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">main</span>():<br>    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>        memory_used_list = get_gpu_memory_usage()<br>        <span class="hljs-comment"># memory_total是你服务器总的显存量，此处使用的服务器有8张40G的A100，因此总显存量为40960*8</span><br>        memory_total = <span class="hljs-number">40960</span> * <span class="hljs-number">8</span><br>        memory_used = <span class="hljs-number">0</span><br>        <span class="hljs-keyword">for</span> memory <span class="hljs-keyword">in</span> memory_used_list:<br>            memory_used += memory<br>        memory_usage_percent = (memory_used / memory_total) * <span class="hljs-number">100</span><br><br>        <span class="hljs-keyword">if</span> memory_usage_percent &lt; <span class="hljs-number">10</span>:<br>            subject = <span class="hljs-string">&#x27;服务器显存占用率过低警告&#x27;</span><br>            body = <span class="hljs-string">f&#x27;显存占用率为 <span class="hljs-subst">&#123;memory_usage_percent&#125;</span>%，低于10%。请检查服务器。&#x27;</span><br>            send_email(subject, body)<br>        <span class="hljs-keyword">else</span>:<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">f&#x27;GPU Memory %: <span class="hljs-subst">&#123;memory_usage_percent&#125;</span>&#x27;</span>)<br><br>        time.sleep(<span class="hljs-number">600</span>)  <span class="hljs-comment"># 等待10分钟（600秒）</span><br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&#x27;__main__&#x27;</span>:<br>    main()<br></code></pre></td></tr></table></figure>
 
-<p>该命令会在后台运行train.sh，同时将标准错误重定向到标准输出，然后再将标准输出写入到log.out文件中。</p>
-<hr>
-<p>上面有提到，nohup 命令结合 &amp; 符号可以使进程在后台运行，即使关闭了终端依然不受影响。这时，如果想要终止这个进程，可以按照以下步骤操作：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">ps aux | grep train.sh<br>或<br>ps -ef | grep python<br></code></pre></td></tr></table></figure>
-
-<p>通过上面的命令获取进程的pid。</p>
-<p>然后用以下命令杀死对应的进程：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">kill</span> -9 pid<br></code></pre></td></tr></table></figure>
-
+<p>我们可以使用<a href="">linux nohup指令详解</a>中介绍的nohup命令运行这两个程序中的一个，以监控大模型的训练是否正常进行。</p>
 
                 
               </div>
@@ -348,6 +319,34 @@
             <div>
               <div class="post-metas my-3">
   
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/" class="category-chain-item">大语言模型入门教程</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" class="print-no-link">#大模型</a>
+      
+    </div>
   
 </div>
 
@@ -357,8 +356,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div></div>
-      <div>http://example.com/2024/09/23/11-linux nohup指令详解/</div>
+      <div>监控大模型训练</div>
+      <div>http://example.com/2024/03/13/12-监控训练/</div>
     </div>
     <div class="license-meta">
       
@@ -370,7 +369,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年9月23日</div>
+          <div>2024年3月13日</div>
         </div>
       
       
@@ -402,9 +401,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/09/23/Ubuntu%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BD%BF%E7%94%A8apt-get%E5%AE%89%E8%A3%85%E5%8C%85%E6%97%B6%E5%87%BA%E7%8E%B0E%20Unable%20to%20locate%20package/" title="">
+                      <a href="/2024/03/14/10-RAG%E5%AE%9E%E6%88%986-%E5%A6%82%E4%BD%95%E5%9C%A8LlamaIndex%E4%B8%AD%E4%BD%BF%E7%94%A8%E8%87%AA%E5%B7%B1%E6%90%AD%E5%BB%BA%E7%9A%84API/" title="RAG实战6-如何在LlamaIndex使用自己搭建的大模型API">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile"></span>
+                        <span class="hidden-mobile">RAG实战6-如何在LlamaIndex使用自己搭建的大模型API</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -412,8 +411,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/03/16/14-%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E9%83%A8%E7%BD%B2%E4%B8%AD%E5%8C%BB%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/" title="在Linux服务器上部署中医知识图谱">
-                        <span class="hidden-mobile">在Linux服务器上部署中医知识图谱</span>
+                      <a href="/2024/03/11/9-RAG%E5%AE%9E%E6%88%985-%E8%87%AA%E5%AE%9A%E4%B9%89prompt/" title="RAG实战5-自定义prompt">
+                        <span class="hidden-mobile">RAG实战5-自定义prompt</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

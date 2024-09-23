@@ -19,21 +19,22 @@
   <meta name="author" content="Whisper">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Linux nohup命令详解我们自己笔记本或台式机的显卡往往不能支持我们进行深度学习实验或大模型训练，因此我们往往使用SSH连接服务器然后去运行代码。 有的时候我们跑的程序需要跑几个小时甚至几天，这样我们就需要一直开着电脑挂着SSH；偶尔也会遇上网络断开，程序半途中止的情况。 所以，我们需要一个下述的功能：即使我们远程连接SSH的终端被关闭了，程序依旧在服务器上运行。这时候就需要用到Linux的">
+    <meta name="description" content="RAG实战3-如何追踪哪些文档片段被用于检索增强生成本文是RAG实战2-如何使用LlamaIndex存储和读取embedding向量的续集，在阅读本文之前请先阅读前篇。 在前篇中，我们介绍了如何使用LlamaIndex存储和读取embedding向量。在本文中，我们将介绍在LlamaIndex中如何获得被用于检索增强生成的文档片段。 下面的代码展示了如何使用LlamaIndex追踪哪些文档片段被用">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Whisper">
-<meta property="og:url" content="http://example.com/2024/09/23/11-linux%20nohup%E6%8C%87%E4%BB%A4%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:title" content="RAG实战3-如何追踪哪些文档片段被用于检索增强生成">
+<meta property="og:url" content="http://example.com/2024/03/07/5-RAG%E5%AE%9E%E6%88%983-%E5%A6%82%E4%BD%95%E8%BF%BD%E8%B8%AA%E5%93%AA%E4%BA%9B%E6%96%87%E6%A1%A3%E7%89%87%E6%AE%B5%E8%A2%AB%E7%94%A8%E4%BA%8E%E6%A3%80%E7%B4%A2%E5%A2%9E%E5%BC%BA%E7%94%9F%E6%88%90/index.html">
 <meta property="og:site_name" content="Whisper">
-<meta property="og:description" content="Linux nohup命令详解我们自己笔记本或台式机的显卡往往不能支持我们进行深度学习实验或大模型训练，因此我们往往使用SSH连接服务器然后去运行代码。 有的时候我们跑的程序需要跑几个小时甚至几天，这样我们就需要一直开着电脑挂着SSH；偶尔也会遇上网络断开，程序半途中止的情况。 所以，我们需要一个下述的功能：即使我们远程连接SSH的终端被关闭了，程序依旧在服务器上运行。这时候就需要用到Linux的">
+<meta property="og:description" content="RAG实战3-如何追踪哪些文档片段被用于检索增强生成本文是RAG实战2-如何使用LlamaIndex存储和读取embedding向量的续集，在阅读本文之前请先阅读前篇。 在前篇中，我们介绍了如何使用LlamaIndex存储和读取embedding向量。在本文中，我们将介绍在LlamaIndex中如何获得被用于检索增强生成的文档片段。 下面的代码展示了如何使用LlamaIndex追踪哪些文档片段被用">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-09-23T01:05:23.654Z">
-<meta property="article:modified_time" content="2024-03-07T11:32:14.906Z">
+<meta property="article:published_time" content="2024-03-06T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-09-23T01:34:20.253Z">
 <meta property="article:author" content="Whisper">
+<meta property="article:tag" content="大模型">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>Whisper</title>
+  <title>RAG实战3-如何追踪哪些文档片段被用于检索增强生成 - Whisper</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -212,7 +213,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text=""></span>
+            <span id="subtitle" data-typed-text="RAG实战3-如何追踪哪些文档片段被用于检索增强生成"></span>
           
         </div>
 
@@ -223,8 +224,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-09-23 09:05" pubdate>
-          2024年9月23日 上午
+        <time datetime="2024-03-07 00:00" pubdate>
+          2024年3月7日 凌晨
         </time>
       </span>
     
@@ -235,7 +236,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          851 字
+          1.5k 字
         
       </span>
     
@@ -246,7 +247,7 @@
         
         
         
-          8 分钟
+          13 分钟
         
       </span>
     
@@ -292,54 +293,52 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header"></h1>
+            <h1 id="seo-header">RAG实战3-如何追踪哪些文档片段被用于检索增强生成</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="Linux-nohup命令详解"><a href="#Linux-nohup命令详解" class="headerlink" title="Linux nohup命令详解"></a>Linux nohup命令详解</h1><p>我们自己笔记本或台式机的显卡往往不能支持我们进行深度学习实验或大模型训练，因此我们往往使用SSH连接服务器然后去运行代码。</p>
-<p>有的时候我们跑的程序需要跑几个小时甚至几天，这样我们就需要一直开着电脑挂着SSH；偶尔也会遇上网络断开，程序半途中止的情况。</p>
-<p>所以，我们需要一个下述的功能：即使我们远程连接SSH的终端被关闭了，程序依旧在服务器上运行。这时候就需要用到Linux的nohup指令。</p>
-<p>nohup命令是英语词组 no hangup的缩写，意思是不挂断，也就是指程序不退出。这个命令会使程序忽略 HUP 信号，保证程序能够正常进行。<code>HUP</code> 信号是在终端被中止的时候向它所关联的进程所发出的信号，进程收到这个信号后就会中止运行。所以如果你不希望进程被这个信号干掉的话，就可以忽略这个信号。而 nohup命令做的就是这个事情。</p>
-<hr>
-<p>首先来看nohup的语法：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">nohup</span> Command [Arg...] [ &amp;]<br></code></pre></td></tr></table></figure>
+                <h1 id="RAG实战3-如何追踪哪些文档片段被用于检索增强生成"><a href="#RAG实战3-如何追踪哪些文档片段被用于检索增强生成" class="headerlink" title="RAG实战3-如何追踪哪些文档片段被用于检索增强生成"></a>RAG实战3-如何追踪哪些文档片段被用于检索增强生成</h1><p>本文是<a target="_blank" rel="noopener" href="https://www.cnblogs.com/yourenbo/p/18057088">RAG实战2-如何使用LlamaIndex存储和读取embedding向量</a>的续集，在阅读本文之前请先阅读前篇。</p>
+<p>在前篇中，我们介绍了如何使用LlamaIndex存储和读取embedding向量。在本文中，我们将介绍在LlamaIndex中如何获得被用于检索增强生成的文档片段。</p>
+<p>下面的代码展示了如何使用LlamaIndex追踪哪些文档片段被用于检索增强生成：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> logging<br><span class="hljs-keyword">import</span> sys<br><span class="hljs-keyword">import</span> torch<br><span class="hljs-keyword">from</span> llama_index.core <span class="hljs-keyword">import</span> PromptTemplate, Settings, StorageContext, load_index_from_storage, QueryBundle<br><span class="hljs-keyword">from</span> llama_index.core.schema <span class="hljs-keyword">import</span> MetadataMode<br><span class="hljs-keyword">from</span> llama_index.embeddings.huggingface <span class="hljs-keyword">import</span> HuggingFaceEmbedding<br><span class="hljs-keyword">from</span> llama_index.llms.huggingface <span class="hljs-keyword">import</span> HuggingFaceLLM<br><br><span class="hljs-comment"># 定义日志</span><br>logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)<br>logging.getLogger().addHandler(logging.StreamHandler(stream=sys.stdout))<br><br><span class="hljs-comment"># 定义system prompt</span><br>SYSTEM_PROMPT = <span class="hljs-string">&quot;&quot;&quot;You are a helpful AI assistant.&quot;&quot;&quot;</span><br>query_wrapper_prompt = PromptTemplate(<br>    <span class="hljs-string">&quot;[INST]&lt;&lt;SYS&gt;&gt;\n&quot;</span> + SYSTEM_PROMPT + <span class="hljs-string">&quot;&lt;&lt;/SYS&gt;&gt;\n\n&#123;query_str&#125;[/INST] &quot;</span><br>)<br><br><span class="hljs-comment"># 使用llama-index创建本地大模型</span><br>llm = HuggingFaceLLM(<br>    context_window=<span class="hljs-number">4096</span>,<br>    max_new_tokens=<span class="hljs-number">2048</span>,<br>    generate_kwargs=&#123;<span class="hljs-string">&quot;temperature&quot;</span>: <span class="hljs-number">0.0</span>, <span class="hljs-string">&quot;do_sample&quot;</span>: <span class="hljs-literal">False</span>&#125;,<br>    query_wrapper_prompt=query_wrapper_prompt,<br>    tokenizer_name=<span class="hljs-string">&#x27;/yldm0226/models/Qwen1.5-14B-Chat&#x27;</span>,<br>    model_name=<span class="hljs-string">&#x27;/yldm0226/models/Qwen1.5-14B-Chat&#x27;</span>,<br>    device_map=<span class="hljs-string">&quot;auto&quot;</span>,<br>    model_kwargs=&#123;<span class="hljs-string">&quot;torch_dtype&quot;</span>: torch.float16&#125;,<br>)<br>Settings.llm = llm<br><br><span class="hljs-comment"># 使用llama-index-embeddings-huggingface构建本地embedding模型</span><br>Settings.embed_model = HuggingFaceEmbedding(<br>    model_name=<span class="hljs-string">&quot;/yldm0226/RAG/BAAI/bge-base-zh-v1.5&quot;</span><br>)<br><br><span class="hljs-comment"># 从存储文件中读取embedding向量和向量索引</span><br>storage_context = StorageContext.from_defaults(persist_dir=<span class="hljs-string">&quot;doc_emb&quot;</span>)<br>index = load_index_from_storage(storage_context)<br><span class="hljs-comment"># 构建查询引擎</span><br>query_engine = index.as_query_engine(similarity_top_k=<span class="hljs-number">5</span>)<br><span class="hljs-comment"># 获取我们抽取出的相似度前五的片段</span><br>contexts = query_engine.retrieve(QueryBundle(<span class="hljs-string">&quot;不耐疲劳，口燥、咽干可能是哪些证候？&quot;</span>))<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;-&#x27;</span>*<span class="hljs-number">10</span> + <span class="hljs-string">&#x27;ref&#x27;</span> + <span class="hljs-string">&#x27;-&#x27;</span>*<span class="hljs-number">10</span>)<br><span class="hljs-keyword">for</span> i, context <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(contexts):<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;*&#x27;</span>*<span class="hljs-number">10</span> + <span class="hljs-string">f&#x27;chunk <span class="hljs-subst">&#123;i&#125;</span> start&#x27;</span> + <span class="hljs-string">&#x27;*&#x27;</span>*<span class="hljs-number">10</span>)<br>    content = context.node.get_content(metadata_mode=MetadataMode.LLM)<br>    <span class="hljs-built_in">print</span>(content)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;*&#x27;</span> * <span class="hljs-number">10</span> + <span class="hljs-string">f&#x27;chunk <span class="hljs-subst">&#123;i&#125;</span> end&#x27;</span> + <span class="hljs-string">&#x27;*&#x27;</span> * <span class="hljs-number">10</span>)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;-&#x27;</span>*<span class="hljs-number">10</span> + <span class="hljs-string">&#x27;ref&#x27;</span> + <span class="hljs-string">&#x27;-&#x27;</span>*<span class="hljs-number">10</span>)<br><span class="hljs-comment"># 查询获得答案</span><br>response = query_engine.query(<span class="hljs-string">&quot;不耐疲劳，口燥、咽干可能是哪些证候？&quot;</span>)<br><span class="hljs-built_in">print</span>(response)<br></code></pre></td></tr></table></figure>
 
-<p> 最后的” &amp;”：表示后台运行，不占用交互命令行 </p>
-<p>如果不将 nohup 命令的输出重定向，输出将附加到当前目录的 nohup.out 文件中。</p>
-<p>如果当前目录的 nohup.out 文件不可写，输出重定向到 $HOME&#x2F;nohup.out 文件中。 </p>
-<p>如果没有文件能创建或打开以用于追加，那么 Command 参数指定的命令不可调用。 </p>
-<p>如果标准错误是一个终端，那么把指定的命令写给标准错误的所有输出作为标准输出重定向到相同的文件描述符。 </p>
-<p>假设用nohup运行一个名为task.sh的脚本： nohup task.sh &gt; my_log.out 2&gt;&amp;1 &amp; </p>
-<p>该命令中的数字解释如下：</p>
-<ul>
-<li>0 – stdin (standard input，标准输入)  </li>
-<li>1 – stdout (standard output，标准输出）</li>
-<li>2 – stderr (standard error，标准错误输出）</li>
-</ul>
-<p> 2&gt;&amp;1解释： 将标准错误（2）重定向到标准输出（&amp;1）， 标准输出（&amp;1）再被重定向输入到my_log.out文件中。</p>
-<hr>
-<p>使用举例：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">nohup</span> python train.py &amp;<br></code></pre></td></tr></table></figure>
+<p>运行代码，可以得到query的输出为：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs markdown">从提供的中医临床证候信息来看，口燥、咽干的症状可能与以下证候相关：<br><br><span class="hljs-bullet">1.</span> 津液不足证：由于津液生成不足或者体内燥热导致，表现为口眼喉鼻干燥，咽干是其中的一个症状。<br><br><span class="hljs-bullet">2.</span> 津亏热结证：津液亏虚加上热邪内结，也可能出现口燥和咽干。<br><br><span class="hljs-bullet">3.</span> 津液亏涸证：严重的津液亏损可能导致口唇干燥、咽部干燥，伴随其他严重脱水症状。<br><br><span class="hljs-bullet">4.</span> 燥干清窍证：气候干燥或体质原因引起的津液缺乏，口鼻咽喉干燥也是其特征。<br><br><span class="hljs-bullet">5.</span> 津伤化燥证：燥热内蕴或内热化燥损伤津液，也会出现口燥、频饮但不解渴的现象。<br><br>因此，这些证候都有可能与不耐疲劳和口燥、咽干的症状相符合，需要结合其他临床表现来确定具体的证候类型。建议在中医诊断中由专业医生根据全人情况判断。<br></code></pre></td></tr></table></figure>
 
-<p>后台运行train.py，会在train.py目录下创建一个nohup.out文件来记录程序的输出。</p>
-<p>在使用时，我们会发现一个问题，nohup.out文件中的内容并不会立刻变化，这是因为python的标准输出是有缓冲的。</p>
-<p>如果我们想要立刻在nohup.out中实时看到python程序的输出，可以使用以下命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">nohup</span> python -u train.py &amp;<br></code></pre></td></tr></table></figure>
-
-<p>-u会禁用python的缓冲。</p>
-<p>假如我们的训练脚本名为train.sh，我们可以使用以下命令启动训练：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">nohup</span> train.sh &gt; log.out 2&gt;&amp;1 &amp;<br></code></pre></td></tr></table></figure>
-
-<p>该命令会在后台运行train.sh，同时将标准错误重定向到标准输出，然后再将标准输出写入到log.out文件中。</p>
-<hr>
-<p>上面有提到，nohup 命令结合 &amp; 符号可以使进程在后台运行，即使关闭了终端依然不受影响。这时，如果想要终止这个进程，可以按照以下步骤操作：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">ps aux | grep train.sh<br>或<br>ps -ef | grep python<br></code></pre></td></tr></table></figure>
-
-<p>通过上面的命令获取进程的pid。</p>
-<p>然后用以下命令杀死对应的进程：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">kill</span> -9 pid<br></code></pre></td></tr></table></figure>
-
+<p>对于”不耐疲劳，口燥、咽干可能是哪些证候？”这个查询，其相似度前五的片段如下：</p>
+<table>
+<thead>
+<tr>
+<th>片段序号</th>
+<th>片段信息</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>file_path: document&#x2F;中医临床诊疗术语证候.txt<br/><br/>4.6.1.1<br/>    津液不足证  syndrome&#x2F;pattern of fluid and humor insufficiency<br/>    津亏证<br/>    因津液生成不足，或嗜食辛辣，蕴热化燥，邪热灼损津液所致。临床以口眼喉鼻及皮肤等干燥，大便干结，小便短少，舌质偏红而干，脉细数等为特征的证候。<br/><br/>4.6.1.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>file_path: document&#x2F;中医临床诊疗术语证候.txt<br/><br/>临床以口干、舌燥，频饮而不解其渴，食多、善饥，夜尿频多，逐渐消瘦，舌质红，舌苔薄黄或少，脉弦细或滑数，伴见皮肤干燥，四肢乏力，大便干结等为特征的证候。<br/><br/>4.6.3.2<br/>    津亏热结证  syndrome&#x2F;pattern of fluid depletion and heat binding<br/>    液干热结证<br/>    因津液亏虚，热邪内结所致。</td>
+</tr>
+<tr>
+<td>3</td>
+<td>file_path: document&#x2F;中医临床诊疗术语证候.txt<br/><br/>临床以口眼喉鼻及皮肤等干燥，大便干结，小便短少，舌质偏红而干，脉细数等为特征的证候。<br/><br/>4.6.1.2<br/>    津液亏涸证  syndrome&#x2F;pattern of fluid and humor scantiness<br/>    津液亏耗证<br/>    津液干枯证<br/>    因津液亏损，形体官窍失养所致。临床以口干、唇裂，鼻燥无涕，皮肤干瘪，目陷、螺瘪，甚则肌肤甲错，舌质红而少津，舌中裂，脉细或数，可伴见口渴、欲饮，干咳，目涩，大便干，小便少等为特征的证候。</td>
+</tr>
+<tr>
+<td>4</td>
+<td>file_path: document&#x2F;中医临床诊疗术语证候.txt<br/><br/>临床以鼻咽干涩或痛，口唇燥干，舌质红，舌苔白或燥，脉浮或微数，伴见发热、无汗，头痛或肢节酸痛等为特征的证候。<br/><br/>3.6.3.2<br/>    燥干清窍证  syndrome&#x2F;pattern of dryness harassing the upper orifices<br/>    因气候或环境干燥，津液耗损，清窍失濡所致。临床以口鼻、咽喉干燥，两眼干涩，少泪、少涕、少津、甚则衄血，舌质瘦小、舌苔干而少津，脉细等为特征的证候。</td>
+</tr>
+<tr>
+<td>5</td>
+<td>file_path: document&#x2F;中医临床诊疗术语证候.txt<br/><br/>6.3.1<br/>    津伤化燥证  syndrome&#x2F;pattern of fluid damage transforming into dryness<br/>    津伤燥热证<br/>    因燥热内蕴，或内热化燥，伤津耗液所致。临床以口干、舌燥，频饮而不解其渴，食多、善饥，夜尿频多，逐渐消瘦，舌质红，舌苔薄黄或少，脉弦细或滑数，伴见皮肤干燥，四肢乏力，大便干结等为特征的证候。<br/><br/>4.6.3.</td>
+</tr>
+</tbody></table>
+<p>可以看出，我们得到的query的输出中的证候都是这几个片段中的，大模型也确实根据我们检索出的片段进行了回复。</p>
+<p>片段1和片段5的结尾存在多余的章节号，这主要与我们使用的embedding模型和设置的<code>chunk_size</code>有关。我们可以通过追踪观察这些被用于检索增强生成的文档片段来调整<code>chunk_size</code>的值，以让embedding模型切分出的片段更合理，提高RAG系统的表现。</p>
+<p>如果想追踪更多的检索片段，可以提高<code>similarity_top_k</code>的值。</p>
+<p>如果想追踪片段具体的相似度得分（Similarity Score）的值，可以将log中的<code>level</code>设置为DEBUG级别。</p>
 
                 
               </div>
@@ -348,6 +347,34 @@
             <div>
               <div class="post-metas my-3">
   
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/" class="category-chain-item">大语言模型入门教程</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" class="print-no-link">#大模型</a>
+      
+    </div>
   
 </div>
 
@@ -357,8 +384,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div></div>
-      <div>http://example.com/2024/09/23/11-linux nohup指令详解/</div>
+      <div>RAG实战3-如何追踪哪些文档片段被用于检索增强生成</div>
+      <div>http://example.com/2024/03/07/5-RAG实战3-如何追踪哪些文档片段被用于检索增强生成/</div>
     </div>
     <div class="license-meta">
       
@@ -370,7 +397,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年9月23日</div>
+          <div>2024年3月7日</div>
         </div>
       
       
@@ -402,9 +429,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/09/23/Ubuntu%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BD%BF%E7%94%A8apt-get%E5%AE%89%E8%A3%85%E5%8C%85%E6%97%B6%E5%87%BA%E7%8E%B0E%20Unable%20to%20locate%20package/" title="">
+                      <a href="/2024/03/08/6-LoRA%E5%BE%AE%E8%B0%83/" title="基于SWIFT和Qwen1.5-14B-Chat进行大模型LoRA微调测试">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile"></span>
+                        <span class="hidden-mobile">基于SWIFT和Qwen1.5-14B-Chat进行大模型LoRA微调测试</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -412,8 +439,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/03/16/14-%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E9%83%A8%E7%BD%B2%E4%B8%AD%E5%8C%BB%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/" title="在Linux服务器上部署中医知识图谱">
-                        <span class="hidden-mobile">在Linux服务器上部署中医知识图谱</span>
+                      <a href="/2024/03/06/4-RAG%E5%AE%9E%E6%88%982-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8LlamaIndex%E5%AD%98%E5%82%A8%E5%92%8C%E8%AF%BB%E5%8F%96%E5%90%91%E9%87%8F/" title="RAG实战2-如何使用LlamaIndex存储和读取embedding向量">
+                        <span class="hidden-mobile">RAG实战2-如何使用LlamaIndex存储和读取embedding向量</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

@@ -19,21 +19,24 @@
   <meta name="author" content="Whisper">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Linux nohup命令详解我们自己笔记本或台式机的显卡往往不能支持我们进行深度学习实验或大模型训练，因此我们往往使用SSH连接服务器然后去运行代码。 有的时候我们跑的程序需要跑几个小时甚至几天，这样我们就需要一直开着电脑挂着SSH；偶尔也会遇上网络断开，程序半途中止的情况。 所以，我们需要一个下述的功能：即使我们远程连接SSH的终端被关闭了，程序依旧在服务器上运行。这时候就需要用到Linux的">
+    <meta name="description" content="使用Nginx将大模型Web应用部署到公网大模型训练完毕后，我们可以用SWIFT快速构建一个Web Demo大模型Web应用，本文将介绍如何使用Nginx将大模型Web应用部署到公网。 在进行后续步骤之前，先按照搭建一个大模型API服务中的方法安装好SWIFT框架，并激活到你的conda环境。 启动大模型Web应用使用SWIFT提供的Web-UI启动大模型Web应用： 1CUDA_VISIBLE_">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Whisper">
-<meta property="og:url" content="http://example.com/2024/09/23/11-linux%20nohup%E6%8C%87%E4%BB%A4%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:title" content="使用Nginx将大模型Web应用部署到公网">
+<meta property="og:url" content="http://example.com/2024/03/15/13-%E4%BD%BF%E7%94%A8Nginx%E5%B0%86%E5%A4%A7%E6%A8%A1%E5%9E%8BWeb%E5%BA%94%E7%94%A8%E9%83%A8%E7%BD%B2%E5%88%B0%E5%85%AC%E7%BD%91/index.html">
 <meta property="og:site_name" content="Whisper">
-<meta property="og:description" content="Linux nohup命令详解我们自己笔记本或台式机的显卡往往不能支持我们进行深度学习实验或大模型训练，因此我们往往使用SSH连接服务器然后去运行代码。 有的时候我们跑的程序需要跑几个小时甚至几天，这样我们就需要一直开着电脑挂着SSH；偶尔也会遇上网络断开，程序半途中止的情况。 所以，我们需要一个下述的功能：即使我们远程连接SSH的终端被关闭了，程序依旧在服务器上运行。这时候就需要用到Linux的">
+<meta property="og:description" content="使用Nginx将大模型Web应用部署到公网大模型训练完毕后，我们可以用SWIFT快速构建一个Web Demo大模型Web应用，本文将介绍如何使用Nginx将大模型Web应用部署到公网。 在进行后续步骤之前，先按照搭建一个大模型API服务中的方法安装好SWIFT框架，并激活到你的conda环境。 启动大模型Web应用使用SWIFT提供的Web-UI启动大模型Web应用： 1CUDA_VISIBLE_">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-09-23T01:05:23.654Z">
-<meta property="article:modified_time" content="2024-03-07T11:32:14.906Z">
+<meta property="og:image" content="c:\Users\WeiSibo\AppData\Roaming\Typora\typora-user-images\image-20240307213845498.png">
+<meta property="article:published_time" content="2024-03-14T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-09-23T01:37:59.607Z">
 <meta property="article:author" content="Whisper">
+<meta property="article:tag" content="大模型">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="c:\Users\WeiSibo\AppData\Roaming\Typora\typora-user-images\image-20240307213845498.png">
   
   
   
-  <title>Whisper</title>
+  <title>使用Nginx将大模型Web应用部署到公网 - Whisper</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -212,7 +215,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text=""></span>
+            <span id="subtitle" data-typed-text="使用Nginx将大模型Web应用部署到公网"></span>
           
         </div>
 
@@ -223,8 +226,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-09-23 09:05" pubdate>
-          2024年9月23日 上午
+        <time datetime="2024-03-15 00:00" pubdate>
+          2024年3月15日 凌晨
         </time>
       </span>
     
@@ -235,7 +238,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          851 字
+          670 字
         
       </span>
     
@@ -246,7 +249,7 @@
         
         
         
-          8 分钟
+          6 分钟
         
       </span>
     
@@ -292,54 +295,55 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header"></h1>
+            <h1 id="seo-header">使用Nginx将大模型Web应用部署到公网</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="Linux-nohup命令详解"><a href="#Linux-nohup命令详解" class="headerlink" title="Linux nohup命令详解"></a>Linux nohup命令详解</h1><p>我们自己笔记本或台式机的显卡往往不能支持我们进行深度学习实验或大模型训练，因此我们往往使用SSH连接服务器然后去运行代码。</p>
-<p>有的时候我们跑的程序需要跑几个小时甚至几天，这样我们就需要一直开着电脑挂着SSH；偶尔也会遇上网络断开，程序半途中止的情况。</p>
-<p>所以，我们需要一个下述的功能：即使我们远程连接SSH的终端被关闭了，程序依旧在服务器上运行。这时候就需要用到Linux的nohup指令。</p>
-<p>nohup命令是英语词组 no hangup的缩写，意思是不挂断，也就是指程序不退出。这个命令会使程序忽略 HUP 信号，保证程序能够正常进行。<code>HUP</code> 信号是在终端被中止的时候向它所关联的进程所发出的信号，进程收到这个信号后就会中止运行。所以如果你不希望进程被这个信号干掉的话，就可以忽略这个信号。而 nohup命令做的就是这个事情。</p>
-<hr>
-<p>首先来看nohup的语法：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">nohup</span> Command [Arg...] [ &amp;]<br></code></pre></td></tr></table></figure>
+                <h1 id="使用Nginx将大模型Web应用部署到公网"><a href="#使用Nginx将大模型Web应用部署到公网" class="headerlink" title="使用Nginx将大模型Web应用部署到公网"></a>使用Nginx将大模型Web应用部署到公网</h1><p>大模型训练完毕后，我们可以用SWIFT快速构建一个Web Demo大模型Web应用，本文将介绍如何使用Nginx将大模型Web应用部署到公网。</p>
+<p>在进行后续步骤之前，先按照<a target="_blank" rel="noopener" href="https://www.cnblogs.com/yourenbo/p/18046379">搭建一个大模型API服务</a>中的方法安装好SWIFT框架，并激活到你的conda环境。</p>
+<h2 id="启动大模型Web应用"><a href="#启动大模型Web应用" class="headerlink" title="启动大模型Web应用"></a>启动大模型Web应用</h2><p>使用SWIFT提供的Web-UI启动大模型Web应用：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">CUDA_VISIBLE_DEVICES=0 swift app-ui --model_type qwen1half-14b-chat --model_id_or_path /yldm0226/models/Qwen1.5-14B-Chat<br></code></pre></td></tr></table></figure>
 
-<p> 最后的” &amp;”：表示后台运行，不占用交互命令行 </p>
-<p>如果不将 nohup 命令的输出重定向，输出将附加到当前目录的 nohup.out 文件中。</p>
-<p>如果当前目录的 nohup.out 文件不可写，输出重定向到 $HOME&#x2F;nohup.out 文件中。 </p>
-<p>如果没有文件能创建或打开以用于追加，那么 Command 参数指定的命令不可调用。 </p>
-<p>如果标准错误是一个终端，那么把指定的命令写给标准错误的所有输出作为标准输出重定向到相同的文件描述符。 </p>
-<p>假设用nohup运行一个名为task.sh的脚本： nohup task.sh &gt; my_log.out 2&gt;&amp;1 &amp; </p>
-<p>该命令中的数字解释如下：</p>
-<ul>
-<li>0 – stdin (standard input，标准输入)  </li>
-<li>1 – stdout (standard output，标准输出）</li>
-<li>2 – stderr (standard error，标准错误输出）</li>
-</ul>
-<p> 2&gt;&amp;1解释： 将标准错误（2）重定向到标准输出（&amp;1）， 标准输出（&amp;1）再被重定向输入到my_log.out文件中。</p>
-<hr>
-<p>使用举例：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">nohup</span> python train.py &amp;<br></code></pre></td></tr></table></figure>
+<p>运行成功后，可以看到以下输出：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">Running on <span class="hljs-built_in">local</span> URL:  http://127.0.0.1:7860<br><br>To create a public <span class="hljs-built_in">link</span>, <span class="hljs-built_in">set</span> `share=True` <span class="hljs-keyword">in</span> `launch()`.<br></code></pre></td></tr></table></figure>
 
-<p>后台运行train.py，会在train.py目录下创建一个nohup.out文件来记录程序的输出。</p>
-<p>在使用时，我们会发现一个问题，nohup.out文件中的内容并不会立刻变化，这是因为python的标准输出是有缓冲的。</p>
-<p>如果我们想要立刻在nohup.out中实时看到python程序的输出，可以使用以下命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">nohup</span> python -u train.py &amp;<br></code></pre></td></tr></table></figure>
+<p>此时，我们就可以通过<a href="http://127.0.0.1:7860访问该Web应用了。">http://127.0.0.1:7860访问该Web应用了。</a></p>
+<p>如果我们想让其他人也能访问到这个网址，需要将Web应用部署到公网。</p>
+<h2 id="配置Nginx服务器"><a href="#配置Nginx服务器" class="headerlink" title="配置Nginx服务器"></a>配置Nginx服务器</h2><p>这里我们使用Nginx来实现需求，Nginx是一个高性能的HTTP和反向代理web服务器，同时也提供了IMAP&#x2F;POP3&#x2F;SMTP服务。</p>
+<p>以Ubuntu系统为例，使用以下命令安装Nginx：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> apt update<br><span class="hljs-built_in">sudo</span> apt install nginx<br></code></pre></td></tr></table></figure>
 
-<p>-u会禁用python的缓冲。</p>
-<p>假如我们的训练脚本名为train.sh，我们可以使用以下命令启动训练：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">nohup</span> train.sh &gt; log.out 2&gt;&amp;1 &amp;<br></code></pre></td></tr></table></figure>
+<p>找到Nginx的配置文件。通常情况下，在Ubuntu中，配置文件位于<code>/etc/nginx/nginx.conf</code>。使用文本编辑器打开配置文件。</p>
+<p>在配置文件中找到<code>http</code>块，然后在其中添加一个新的<code>server</code>块。示例如下：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-section">server</span> &#123;<br>       <span class="hljs-attribute">listen</span> <span class="hljs-number">80</span>;<br>       <span class="hljs-attribute">server_name</span> 你的服务器ip地址;<br><br>       <span class="hljs-section">location</span> / &#123;<br>       <span class="hljs-attribute">proxy_pass</span> http://localhost:7860;<br>       <span class="hljs-attribute">proxy_http_version</span> <span class="hljs-number">1</span>.<span class="hljs-number">1</span>;<br>       <span class="hljs-attribute">proxy_set_header</span> Upgrade <span class="hljs-variable">$http_upgrade</span>;<br>       <span class="hljs-attribute">proxy_set_header</span> Connection <span class="hljs-string">&quot;Upgrade&quot;</span>;<br>       <span class="hljs-attribute">proxy_set_header</span> Host <span class="hljs-variable">$host</span>;<br>       <span class="hljs-attribute">proxy_set_header</span> X-Real-IP <span class="hljs-variable">$remote_addr</span>;<br>       <span class="hljs-attribute">proxy_set_header</span> X-Forwarded-For <span class="hljs-variable">$proxy_add_x_forwarded_for</span>;<br>       &#125;<br>   &#125;<br><br></code></pre></td></tr></table></figure>
 
-<p>该命令会在后台运行train.sh，同时将标准错误重定向到标准输出，然后再将标准输出写入到log.out文件中。</p>
-<hr>
-<p>上面有提到，nohup 命令结合 &amp; 符号可以使进程在后台运行，即使关闭了终端依然不受影响。这时，如果想要终止这个进程，可以按照以下步骤操作：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">ps aux | grep train.sh<br>或<br>ps -ef | grep python<br></code></pre></td></tr></table></figure>
+<p>保存并关闭配置文件。</p>
+<p>运行以下命令检查Nginx配置是否有语法错误：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> nginx -t<br></code></pre></td></tr></table></figure>
 
-<p>通过上面的命令获取进程的pid。</p>
-<p>然后用以下命令杀死对应的进程：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">kill</span> -9 pid<br></code></pre></td></tr></table></figure>
+<p>如果没有错误，可以看到以下输出：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs nginx">nginx: <span class="hljs-attribute">the</span> configuration file /etc/nginx/nginx.conf syntax is ok<br>nginx: configuration file /etc/nginx/nginx.conf test is successful<br></code></pre></td></tr></table></figure>
 
+<p>如果有错误，请仔细检查并纠正错误。</p>
+<p>运行以下命令启动nginx服务：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">service nginx start<br></code></pre></td></tr></table></figure>
+
+<p>如果服务器上启用了防火墙（如iptables），需要确保将Nginx监听的80端口放行。</p>
+<p>检查当前的iptables规则：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">iptables -L<br></code></pre></td></tr></table></figure>
+
+<p>如果没有现有的规则允许80端口的流量通过，可以使用以下命令添加规则：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">iptables -A INPUT -p tcp --dport 80 -j ACCEPT<br></code></pre></td></tr></table></figure>
+
+<p>这将允许TCP流量通过80端口。</p>
+<p>如果服务器上运行着防火墙软件（如UFW），还需要确保它允许80端口的流量通过。可以使用以下命令启用UFW的80端口：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">ufw</span> <span class="hljs-literal">allow</span> <span class="hljs-number">80</span><br></code></pre></td></tr></table></figure>
+
+<p>如果权限不足，需要在命令前加上<code>sudo</code>以获取管理员权限。</p>
+<p>成功之后，就可以在本地浏览器中通过<a href="http://ip来访问服务器上的大模型Web应用了：">http://ip来访问服务器上的大模型Web应用了：</a></p>
+<p><img src="C:\Users\WeiSibo\AppData\Roaming\Typora\typora-user-images\image-20240307213845498.png" srcset="/img/loading.gif" lazyload alt="image-20240307213845498"></p>
+<p>请注意，如果你的服务器网络是内网，本地需要额外的代理才能正常访问Web应用。</p>
 
                 
               </div>
@@ -348,6 +352,34 @@
             <div>
               <div class="post-metas my-3">
   
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/" class="category-chain-item">大语言模型入门教程</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" class="print-no-link">#大模型</a>
+      
+    </div>
   
 </div>
 
@@ -357,8 +389,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div></div>
-      <div>http://example.com/2024/09/23/11-linux nohup指令详解/</div>
+      <div>使用Nginx将大模型Web应用部署到公网</div>
+      <div>http://example.com/2024/03/15/13-使用Nginx将大模型Web应用部署到公网/</div>
     </div>
     <div class="license-meta">
       
@@ -370,7 +402,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年9月23日</div>
+          <div>2024年3月15日</div>
         </div>
       
       
@@ -402,9 +434,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/09/23/Ubuntu%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BD%BF%E7%94%A8apt-get%E5%AE%89%E8%A3%85%E5%8C%85%E6%97%B6%E5%87%BA%E7%8E%B0E%20Unable%20to%20locate%20package/" title="">
+                      <a href="/2024/03/16/14-%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E9%83%A8%E7%BD%B2%E4%B8%AD%E5%8C%BB%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/" title="在Linux服务器上部署中医知识图谱">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile"></span>
+                        <span class="hidden-mobile">在Linux服务器上部署中医知识图谱</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -412,8 +444,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/03/16/14-%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E9%83%A8%E7%BD%B2%E4%B8%AD%E5%8C%BB%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/" title="在Linux服务器上部署中医知识图谱">
-                        <span class="hidden-mobile">在Linux服务器上部署中医知识图谱</span>
+                      <a href="/2024/03/14/10-RAG%E5%AE%9E%E6%88%986-%E5%A6%82%E4%BD%95%E5%9C%A8LlamaIndex%E4%B8%AD%E4%BD%BF%E7%94%A8%E8%87%AA%E5%B7%B1%E6%90%AD%E5%BB%BA%E7%9A%84API/" title="RAG实战6-如何在LlamaIndex使用自己搭建的大模型API">
+                        <span class="hidden-mobile">RAG实战6-如何在LlamaIndex使用自己搭建的大模型API</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
