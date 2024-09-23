@@ -19,25 +19,26 @@
   <meta name="author" content="Whisper">
   <meta name="keywords" content="">
   
-    <meta name="description" content="title: 搭建一个大模型API服务  date: 2024-03-01 tags: - 大模型, API  categories: - 大语言模型入门教程  搭建一个大模型API服务本文将介绍如何使用SWIFT框架搭建一个大模型API服务，以方便后续做RAG、Agent的开发工作。 环境准备基础环境  操作系统：Ubuntu 18.04.5 LTS (GNU&#x2F;Linux 3.10.">
+    <meta name="description" content="搭建一个大模型API服务本文将介绍如何使用SWIFT框架搭建一个大模型API服务，以方便后续做RAG、Agent的开发工作。 环境准备基础环境  操作系统：Ubuntu 18.04.5 LTS (GNU&#x2F;Linux 3.10.0-1127.el7.x86_64 x86_64) Anaconda3：Anaconda3-2023.03-1-Linux-x86_64 根据服务器网络情况配置好c">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Whisper">
-<meta property="og:url" content="http://example.com/2024/09/23/1-%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%A4%A7%E6%A8%A1%E5%9E%8BAPI%E6%9C%8D%E5%8A%A1/index.html">
+<meta property="og:title" content="搭建一个大模型API服务">
+<meta property="og:url" content="http://example.com/2024/03/01/1-%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%A4%A7%E6%A8%A1%E5%9E%8BAPI%E6%9C%8D%E5%8A%A1/index.html">
 <meta property="og:site_name" content="Whisper">
-<meta property="og:description" content="title: 搭建一个大模型API服务  date: 2024-03-01 tags: - 大模型, API  categories: - 大语言模型入门教程  搭建一个大模型API服务本文将介绍如何使用SWIFT框架搭建一个大模型API服务，以方便后续做RAG、Agent的开发工作。 环境准备基础环境  操作系统：Ubuntu 18.04.5 LTS (GNU&#x2F;Linux 3.10.">
+<meta property="og:description" content="搭建一个大模型API服务本文将介绍如何使用SWIFT框架搭建一个大模型API服务，以方便后续做RAG、Agent的开发工作。 环境准备基础环境  操作系统：Ubuntu 18.04.5 LTS (GNU&#x2F;Linux 3.10.0-1127.el7.x86_64 x86_64) Anaconda3：Anaconda3-2023.03-1-Linux-x86_64 根据服务器网络情况配置好c">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/images/nvidia-smi.png">
 <meta property="og:image" content="http://example.com/images/pytorch%E7%89%88%E6%9C%AC.png">
 <meta property="og:image" content="http://example.com/images/%E5%A4%9A%E5%8D%A1%E6%98%BE%E5%AD%98%E5%8D%A0%E7%94%A8.png">
-<meta property="article:published_time" content="2024-09-23T01:05:23.676Z">
-<meta property="article:modified_time" content="2024-09-23T01:24:51.239Z">
+<meta property="article:published_time" content="2024-02-29T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-09-23T01:29:53.319Z">
 <meta property="article:author" content="Whisper">
+<meta property="article:tag" content="大模型, API">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="http://example.com/images/nvidia-smi.png">
   
   
   
-  <title>Whisper</title>
+  <title>搭建一个大模型API服务 - Whisper</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -216,7 +217,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text=""></span>
+            <span id="subtitle" data-typed-text="搭建一个大模型API服务"></span>
           
         </div>
 
@@ -227,8 +228,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-09-23 09:05" pubdate>
-          2024年9月23日 上午
+        <time datetime="2024-03-01 00:00" pubdate>
+          2024年3月1日 凌晨
         </time>
       </span>
     
@@ -296,18 +297,12 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header"></h1>
+            <h1 id="seo-header">搭建一个大模型API服务</h1>
             
             
               <div class="markdown-body">
                 
-                <hr>
-<p>title: 搭建一个大模型API服务 </p>
-<p>date: 2024-03-01</p>
-<p>tags: - 大模型, API </p>
-<p>categories: - 大语言模型入门教程</p>
-<hr>
-<h1 id="搭建一个大模型API服务"><a href="#搭建一个大模型API服务" class="headerlink" title="搭建一个大模型API服务"></a>搭建一个大模型API服务</h1><p>本文将介绍如何使用SWIFT框架搭建一个大模型API服务，以方便后续做RAG、Agent的开发工作。</p>
+                <h1 id="搭建一个大模型API服务"><a href="#搭建一个大模型API服务" class="headerlink" title="搭建一个大模型API服务"></a>搭建一个大模型API服务</h1><p>本文将介绍如何使用SWIFT框架搭建一个大模型API服务，以方便后续做RAG、Agent的开发工作。</p>
 <h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><p>基础环境</p>
 <ul>
 <li>操作系统：Ubuntu 18.04.5 LTS (GNU&#x2F;Linux 3.10.0-1127.el7.x86_64 x86_64)</li>
@@ -382,6 +377,34 @@
             <div>
               <div class="post-metas my-3">
   
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/" class="category-chain-item">大语言模型入门教程</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B-API/" class="print-no-link">#大模型, API</a>
+      
+    </div>
   
 </div>
 
@@ -391,8 +414,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div></div>
-      <div>http://example.com/2024/09/23/1-搭建一个大模型API服务/</div>
+      <div>搭建一个大模型API服务</div>
+      <div>http://example.com/2024/03/01/1-搭建一个大模型API服务/</div>
     </div>
     <div class="license-meta">
       
@@ -404,7 +427,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年9月23日</div>
+          <div>2024年3月1日</div>
         </div>
       
       
@@ -436,7 +459,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/09/23/Ubuntu%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BD%BF%E7%94%A8apt-get%E5%AE%89%E8%A3%85%E5%8C%85%E6%97%B6%E5%87%BA%E7%8E%B0E%20Unable%20to%20locate%20package/" title="">
+                      <a href="/2024/09/23/2-%E6%A3%80%E7%B4%A2%E5%A2%9E%E5%BC%BA%E7%94%9F%E6%88%90(Retrieval-augmented%20Generation,RAG)%E5%AE%9E%E6%88%981-%E5%9F%BA%E4%BA%8ELlamaIndex%E6%9E%84%E5%BB%BA%E7%AC%AC%E4%B8%80%E4%B8%AARAG%E5%BA%94%E7%94%A8/" title="">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile"></span>
                         <span class="visible-mobile">上一篇</span>
@@ -445,12 +468,6 @@
                   </article>
                   <article class="post-next col-6">
                     
-                    
-                      <a href="/2024/09/23/10-RAG%E5%AE%9E%E6%88%986-%E5%A6%82%E4%BD%95%E5%9C%A8LlamaIndex%E4%B8%AD%E4%BD%BF%E7%94%A8%E8%87%AA%E5%B7%B1%E6%90%AD%E5%BB%BA%E7%9A%84API/" title="">
-                        <span class="hidden-mobile"></span>
-                        <span class="visible-mobile">下一篇</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
                     
                   </article>
                 </div>
