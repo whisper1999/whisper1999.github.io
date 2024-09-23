@@ -416,5 +416,30 @@
   
   
   
+  <entry>
+    <title>Ubuntu服务器使用apt-get安装包时出现Unable to locate package解决方法</title>
+    <link href="/2024/02/15/Ubuntu%20apt-get%20%E6%89%BE%E4%B8%8D%E5%88%B0%E5%8C%85/"/>
+    <url>/2024/02/15/Ubuntu%20apt-get%20%E6%89%BE%E4%B8%8D%E5%88%B0%E5%8C%85/</url>
+    
+    <content type="html"><![CDATA[<h1 id="Ubuntu服务器使用apt-get安装包时出现Unable-to-locate-package解决方法"><a href="#Ubuntu服务器使用apt-get安装包时出现Unable-to-locate-package解决方法" class="headerlink" title="Ubuntu服务器使用apt-get安装包时出现Unable to locate package解决方法"></a>Ubuntu服务器使用apt-get安装包时出现Unable to locate package解决方法</h1><p>首先根据网络情况换源：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs shell">cat &gt; /etc/apt/sources.list &lt;&lt; &quot;EOF&quot;<br>deb https://mirrors.shanhe.com/ubuntu/ bionic main restricted universe multiverse<br>deb-src https://mirrors.shanhe.com/ubuntu/ bionic main restricted universe multiverse<br>deb https://mirrors.shanhe.com/ubuntu/ bionic-security main restricted universe multiverse<br>deb-src https://mirrors.shanhe.com/ubuntu/ bionic-security main restricted universe multiverse<br><br>deb https://mirrors.shanhe.com/ubuntu/ bionic-updates main restricted universe multiverse<br>deb-src https://mirrors.shanhe.com/ubuntu/ bionic-updates main restricted universe multiverse<br><br>deb https://mirrors.shanhe.com/ubuntu/ bionic-backports main restricted universe multiverse<br>deb-src https://mirrors.shanhe.com/ubuntu/ bionic-backports main restricted universe multiverse<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash"><span class="hljs-comment"># Not recommended</span></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">deb http://mirrors.shanhe.com/ubuntu/ bionic-proposed main restricted universe multiverse</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">deb-src http://mirrors.shanhe.com/ubuntu/ bionic-proposed main restricted universe multiverse</span><br>EOF<br></code></pre></td></tr></table></figure><p>然后执行以下命令：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">apt-get clean all<br>apt-get update<br></code></pre></td></tr></table></figure><p>然后再次使用apt-get安装对应的包即可解决问题：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">apt-get install 包名<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>Linux</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Ubuntu</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
   
 </search>

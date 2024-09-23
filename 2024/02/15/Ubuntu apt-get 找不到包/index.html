@@ -19,21 +19,22 @@
   <meta name="author" content="Whisper">
   <meta name="keywords" content="">
   
-    <meta name="description" content="超算服务器山河源配置添加host1234vi &#x2F;etc&#x2F;hosts### 追加一行 10.251.102.1 mirrors.shanhe.com10.251.102.1 mirrors.shanhe.com## 保存后退出 ：wq  ubuntu 18.0412345678910111213141516cat &gt; &#x2F;etc&#x2F;apt&#x2F;sources.list &lt;&lt; &quot;E">
+    <meta name="description" content="Ubuntu服务器使用apt-get安装包时出现Unable to locate package解决方法首先根据网络情况换源： 12345678910111213141516cat &gt; &#x2F;etc&#x2F;apt&#x2F;sources.list &lt;&lt; &quot;EOF&quot;deb https:&#x2F;&#x2F;mirrors.shanhe.com&#x2F;ubuntu&#x2F; bionic main restric">
 <meta property="og:type" content="article">
-<meta property="og:title" content="超算服务器山河源配置">
-<meta property="og:url" content="http://example.com/2024/03/01/%E8%B6%85%E7%AE%97%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%B1%B1%E6%B2%B3%E6%BA%90%E9%85%8D%E7%BD%AE/index.html">
+<meta property="og:title" content="Ubuntu服务器使用apt-get安装包时出现Unable to locate package解决方法">
+<meta property="og:url" content="http://example.com/2024/02/15/Ubuntu%20apt-get%20%E6%89%BE%E4%B8%8D%E5%88%B0%E5%8C%85/index.html">
 <meta property="og:site_name" content="Whisper">
-<meta property="og:description" content="超算服务器山河源配置添加host1234vi &#x2F;etc&#x2F;hosts### 追加一行 10.251.102.1 mirrors.shanhe.com10.251.102.1 mirrors.shanhe.com## 保存后退出 ：wq  ubuntu 18.0412345678910111213141516cat &gt; &#x2F;etc&#x2F;apt&#x2F;sources.list &lt;&lt; &quot;E">
+<meta property="og:description" content="Ubuntu服务器使用apt-get安装包时出现Unable to locate package解决方法首先根据网络情况换源： 12345678910111213141516cat &gt; &#x2F;etc&#x2F;apt&#x2F;sources.list &lt;&lt; &quot;EOF&quot;deb https:&#x2F;&#x2F;mirrors.shanhe.com&#x2F;ubuntu&#x2F; bionic main restric">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-02-29T16:00:00.000Z">
-<meta property="article:modified_time" content="2024-09-23T01:39:58.173Z">
+<meta property="article:published_time" content="2024-02-14T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-09-23T01:59:19.974Z">
 <meta property="article:author" content="Whisper">
+<meta property="article:tag" content="Ubuntu">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>超算服务器山河源配置 - Whisper</title>
+  <title>Ubuntu服务器使用apt-get安装包时出现Unable to locate package解决方法 - Whisper</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -212,7 +213,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="超算服务器山河源配置"></span>
+            <span id="subtitle" data-typed-text="Ubuntu服务器使用apt-get安装包时出现Unable to locate package解决方法"></span>
           
         </div>
 
@@ -223,8 +224,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-03-01 00:00" pubdate>
-          2024年3月1日 凌晨
+        <time datetime="2024-02-15 00:00" pubdate>
+          2024年2月15日 凌晨
         </time>
       </span>
     
@@ -235,7 +236,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          201 字
+          139 字
         
       </span>
     
@@ -292,18 +293,19 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">超算服务器山河源配置</h1>
+            <h1 id="seo-header">Ubuntu服务器使用apt-get安装包时出现Unable to locate package解决方法</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="超算服务器山河源配置"><a href="#超算服务器山河源配置" class="headerlink" title="超算服务器山河源配置"></a>超算服务器山河源配置</h1><h2 id="添加host"><a href="#添加host" class="headerlink" title="添加host"></a>添加host</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">vi /etc/hosts<br><span class="hljs-comment">### 追加一行 10.251.102.1 mirrors.shanhe.com</span><br>10.251.102.1 mirrors.shanhe.com<br><span class="hljs-comment">## 保存后退出 ：wq</span><br></code></pre></td></tr></table></figure>
+                <h1 id="Ubuntu服务器使用apt-get安装包时出现Unable-to-locate-package解决方法"><a href="#Ubuntu服务器使用apt-get安装包时出现Unable-to-locate-package解决方法" class="headerlink" title="Ubuntu服务器使用apt-get安装包时出现Unable to locate package解决方法"></a>Ubuntu服务器使用apt-get安装包时出现Unable to locate package解决方法</h1><p>首先根据网络情况换源：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs shell">cat &gt; /etc/apt/sources.list &lt;&lt; &quot;EOF&quot;<br>deb https://mirrors.shanhe.com/ubuntu/ bionic main restricted universe multiverse<br>deb-src https://mirrors.shanhe.com/ubuntu/ bionic main restricted universe multiverse<br>deb https://mirrors.shanhe.com/ubuntu/ bionic-security main restricted universe multiverse<br>deb-src https://mirrors.shanhe.com/ubuntu/ bionic-security main restricted universe multiverse<br><br>deb https://mirrors.shanhe.com/ubuntu/ bionic-updates main restricted universe multiverse<br>deb-src https://mirrors.shanhe.com/ubuntu/ bionic-updates main restricted universe multiverse<br><br>deb https://mirrors.shanhe.com/ubuntu/ bionic-backports main restricted universe multiverse<br>deb-src https://mirrors.shanhe.com/ubuntu/ bionic-backports main restricted universe multiverse<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash"><span class="hljs-comment"># Not recommended</span></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">deb http://mirrors.shanhe.com/ubuntu/ bionic-proposed main restricted universe multiverse</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">deb-src http://mirrors.shanhe.com/ubuntu/ bionic-proposed main restricted universe multiverse</span><br>EOF<br></code></pre></td></tr></table></figure>
 
-<h2 id="ubuntu-18-04"><a href="#ubuntu-18-04" class="headerlink" title="ubuntu 18.04"></a>ubuntu 18.04</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cat</span> &gt; /etc/apt/sources.list &lt;&lt; <span class="hljs-string">&quot;EOF&quot;</span><br>deb https://mirrors.shanhe.com/ubuntu/ bionic main restricted universe multiverse<br>deb-src https://mirrors.shanhe.com/ubuntu/ bionic main restricted universe multiverse<br>deb https://mirrors.shanhe.com/ubuntu/ bionic-security main restricted universe multiverse<br>deb-src https://mirrors.shanhe.com/ubuntu/ bionic-security main restricted universe multiverse<br><br>deb https://mirrors.shanhe.com/ubuntu/ bionic-updates main restricted universe multiverse<br>deb-src https://mirrors.shanhe.com/ubuntu/ bionic-updates main restricted universe multiverse<br><br>deb https://mirrors.shanhe.com/ubuntu/ bionic-backports main restricted universe multiverse<br>deb-src https://mirrors.shanhe.com/ubuntu/ bionic-backports main restricted universe multiverse<br><br><span class="hljs-comment">## Not recommended</span><br><span class="hljs-comment"># deb http://mirrors.shanhe.com/ubuntu/ bionic-proposed main restricted universe multiverse</span><br><span class="hljs-comment"># deb-src http://mirrors.shanhe.com/ubuntu/ bionic-proposed main restricted universe multiverse</span><br>EOF<br></code></pre></td></tr></table></figure>
+<p>然后执行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">apt-get clean all<br>apt-get update<br></code></pre></td></tr></table></figure>
 
-<h2 id="condarc"><a href="#condarc" class="headerlink" title=".condarc"></a>.condarc</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cat</span> &gt; ~/.condarc &lt;&lt; <span class="hljs-string">&quot;EOF&quot;</span><br>channels:<br>  - defaults<br>show_channel_urls: <span class="hljs-literal">true</span><br>default_channels:<br>  - https://mirrors.shanhe.com/anaconda/pkgs/main<br>  - https://mirrors.shanhe.com/anaconda/pkgs/r<br>  - https://mirrors.shanhe.com/anaconda/pkgs/msys2<br>custom_channels:<br>  bioconda: https://mirrors.shanhe.com/anaconda/cloud<br>  conda-forge: https://mirrors.shanhe.com/anaconda/cloud<br>ssl_verify: <span class="hljs-literal">false</span><br>EOF<br></code></pre></td></tr></table></figure>
-
-<h2 id="pip"><a href="#pip" class="headerlink" title="pip"></a>pip</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 下面举例了pip安装numpy库两种方式</span><br><span class="hljs-comment">#方式1</span><br><span class="hljs-built_in">mkdir</span> ~/.pip<br><span class="hljs-built_in">cd</span> ~/.pip<br>vim pip.conf<br><br>[global]<br>index-url=https://mirrors.shanhe.com/simple<br>trusted-host = mirrors.shanhe.com<br><br>:wq<br>pip install nump<br><span class="hljs-comment">##方式2 </span><br>pip install nump -i https://mirrors.shanhe.com/simple<br></code></pre></td></tr></table></figure>
+<p>然后再次使用apt-get安装对应的包即可解决问题：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">apt-get install 包名<br></code></pre></td></tr></table></figure>
 
 
                 
@@ -335,6 +337,13 @@
     </div>
   
   
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Ubuntu/" class="print-no-link">#Ubuntu</a>
+      
+    </div>
+  
 </div>
 
 
@@ -343,8 +352,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>超算服务器山河源配置</div>
-      <div>http://example.com/2024/03/01/超算服务器山河源配置/</div>
+      <div>Ubuntu服务器使用apt-get安装包时出现Unable to locate package解决方法</div>
+      <div>http://example.com/2024/02/15/Ubuntu apt-get 找不到包/</div>
     </div>
     <div class="license-meta">
       
@@ -356,7 +365,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年3月1日</div>
+          <div>2024年2月15日</div>
         </div>
       
       
@@ -388,21 +397,15 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/03/01/%E8%A7%A3%E5%86%B3debian%E6%9C%8D%E5%8A%A1%E5%99%A8DNS%E8%87%AA%E5%8A%A8%E6%B8%85%E9%99%A4%E9%97%AE%E9%A2%98/" title="解决Debian服务器使用NetworkManager出现的DNS自动清除问题">
+                      <a href="/2024/03/01/%E8%B6%85%E7%AE%97%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%B1%B1%E6%B2%B3%E6%BA%90%E9%85%8D%E7%BD%AE/" title="超算服务器山河源配置">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">解决Debian服务器使用NetworkManager出现的DNS自动清除问题</span>
+                        <span class="hidden-mobile">超算服务器山河源配置</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
                   </article>
                   <article class="post-next col-6">
                     
-                    
-                      <a href="/2024/02/15/Ubuntu%20apt-get%20%E6%89%BE%E4%B8%8D%E5%88%B0%E5%8C%85/" title="Ubuntu服务器使用apt-get安装包时出现Unable to locate package解决方法">
-                        <span class="hidden-mobile">Ubuntu服务器使用apt-get安装包时出现Unable to locate package解决方法</span>
-                        <span class="visible-mobile">下一篇</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
                     
                   </article>
                 </div>
